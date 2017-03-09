@@ -30,7 +30,9 @@ bundle exec rake run
 
 ### Running the test suite
 
-😞
+```
+bundle exec rspec
+```
 
 ## Licence
 
