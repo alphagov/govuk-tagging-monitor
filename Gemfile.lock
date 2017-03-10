@@ -1,16 +1,41 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.5.0)
+      public_suffix (~> 2.0, >= 2.0.2)
+    crack (0.4.3)
+      safe_yaml (~> 1.0.0)
+    diff-lcs (1.3)
     ethon (0.10.1)
       ffi (>= 1.3.0)
     ffi (1.9.18)
+    hashdiff (0.3.2)
     mini_portile2 (2.1.0)
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
+    public_suffix (2.0.5)
     rake (12.0.0)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.4)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
+    safe_yaml (1.0.4)
     statsd-ruby (1.3.0)
     typhoeus (1.1.2)
       ethon (>= 0.9.0)
+    webmock (2.3.2)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff
 
 PLATFORMS
   ruby
@@ -18,8 +43,10 @@ PLATFORMS
 DEPENDENCIES
   nokogiri
   rake
+  rspec
   statsd-ruby
   typhoeus
+  webmock
 
 BUNDLED WITH
    1.13.1

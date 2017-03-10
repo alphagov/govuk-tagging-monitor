@@ -1,0 +1,10 @@
+require 'typhoeus'
+require 'json'
+require 'statsd'
+require 'nokogiri'
+
+require_relative './stats_helpers'
+require_relative './services'
+require_relative './http'
+require_relative './global_stats'
+require_relative './navigation_page_quality'
