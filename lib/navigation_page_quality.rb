@@ -25,6 +25,19 @@ class NavigationPageQuality
         warnings << "#{url} has no tagged content shown"
       end
 
+      if page_type == "accordion"
+        subsections = doc.css('.topic-content .subsection')
+
+        subsections.each do |subsection|
+          subsection_title = subsection.css('.subsection-title').text
+          content_links = subsection.css('.subsection-content ol li a')
+
+          if content_links.count == 0
+            warnings << "Accordion subsection #{subsection_title} in #{url} doesn't have content"
+          end
+        end
+      end
+
       size
     end
 
