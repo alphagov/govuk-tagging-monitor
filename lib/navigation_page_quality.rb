@@ -16,6 +16,7 @@ class NavigationPageQuality
     pages = HTTP.get_multiple(navigation_urls)
 
     pages.map do |url, page|
+      puts "Analysing taxonomy page #{url}"
       doc = Nokogiri::HTML(page)
 
       page_type = doc.css('meta[name="govuk:navigation-page-type"]').attr("content").to_s
@@ -51,6 +52,8 @@ class NavigationPageQuality
       }
 
       HTTP.post(ENV["BADGER_SLACK_WEBHOOK_URL"], body: JSON.dump(message_payload))
+
+      puts message_payload[:text]
     end
   end
 
