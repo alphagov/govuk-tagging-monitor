@@ -4,7 +4,7 @@ class NavigationPageQuality
   def run
     warnings = []
 
-    education = HTTP.get("https://www.gov.uk/api/content/education")
+    education = HTTP.get_json("https://www.gov.uk/api/content/education")
     all_taxon_base_paths = Flatten.new(education).flattened
 
     gauge "navigation_pages.count", all_taxon_base_paths.size

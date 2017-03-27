@@ -1,15 +1,18 @@
 require 'spec_helper'
 
-RSpec.describe GovukTaggingMonitor::Linters::Taxonomy, '#lint' do
+RSpec.describe Linters::Taxonomy, '#lint' do
   context 'linting a taxonomy with 3 levels' do
     before(:each) do
       stub_request(:get, 'https://www.gov.uk/api/content/root_taxon')
         .to_return(body: three_level_taxonomy.to_json)
+
+      stub_request(:get, %r(https://www\.gov\.uk/(?!api/)))
+        .to_return(body: '')
     end
 
     it 'lints each taxon' do
       linter_spy = LinterSpy.new
-      taxonomy_linter = GovukTaggingMonitor::Linters::Taxonomy.new(linters: [linter_spy])
+      taxonomy_linter = Linters::Taxonomy.new(linters: [linter_spy])
 
       taxonomy_linter.lint('/root_taxon')
 
@@ -25,7 +28,7 @@ RSpec.describe GovukTaggingMonitor::Linters::Taxonomy, '#lint' do
 
     it 'correctly records depths' do
       linter_spy = LinterSpy.new
-      taxonomy_linter = GovukTaggingMonitor::Linters::Taxonomy.new(linters: [linter_spy])
+      taxonomy_linter = Linters::Taxonomy.new(linters: [linter_spy])
 
       taxonomy_linter.lint('/root_taxon')
 
@@ -69,7 +72,7 @@ RSpec.describe GovukTaggingMonitor::Linters::Taxonomy, '#lint' do
       linter_spy_2 = LinterSpy.new
       linter_spy_3 = LinterSpy.new
 
-      taxonomy_linter = GovukTaggingMonitor::Linters::Taxonomy.new(
+      taxonomy_linter = Linters::Taxonomy.new(
         linters: [
           linter_spy_1,
           linter_spy_2,
@@ -97,12 +100,15 @@ RSpec.describe GovukTaggingMonitor::Linters::Taxonomy, '#lint' do
     before(:each) do
       stub_request(:get, 'https://www.gov.uk/api/content/root_taxon')
         .to_return(body: simple_taxonomy.to_json)
+
+      stub_request(:get, %r(https://www\.gov\.uk/(?!api/)))
+        .to_return(body: '')
     end
 
     it 'returns an array of taxons and their warnings' do
       linter = LinterSpy.new
 
-      taxonomy_linter = GovukTaggingMonitor::Linters::Taxonomy.new(
+      taxonomy_linter = Linters::Taxonomy.new(
         linters: [linter]
       )
 
