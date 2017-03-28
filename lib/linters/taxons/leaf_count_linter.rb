@@ -1,15 +1,14 @@
 module Linters
   module Taxons
-    class LeafCountLinter
+    class LeafCountLinter < CountLinter
       def lint(taxon)
         return [] unless is_leaf?(taxon)
 
-        number_of_content_items_displayed = taxon.body_html
+        number_of_content_items = taxon.body_html
           .css('.topic-content ol li a').count
 
-        # AKG TODO: move these numbers into a config?
-        if number_of_content_items_displayed == 0 || number_of_content_items_displayed > 20
-          ["#{number_of_content_items_displayed} content items tagged"]
+        if @warn_if_count_evaluates_true.call(number_of_content_items)
+          ["#{number_of_content_items} content items tagged"]
         else
           []
         end

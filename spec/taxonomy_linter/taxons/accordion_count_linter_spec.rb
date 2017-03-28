@@ -12,36 +12,53 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
       )
     end
 
-    it 'warns for subsections with 0 content items' do
-      @taxon.body_html = body_html_with_subsection_content_items(0)
-      linter = Linters::Taxons::AccordionCountLinter.new
+    context 'with a linter checking for ==0 content items' do
+      before(:each) do
+        @linter = Linters::Taxons::AccordionCountLinter.new { |count| count == 0 }
+      end
 
-      warnings = linter.lint(@taxon)
+      it 'warns for subsections with 0 content items' do
+        @taxon.body_html = body_html_with_subsection_content_items(0)
 
-      expect(warnings).to contain_exactly(
-        "Accordion subsection 'Subsection' has 0 content items tagged"
-      )
+        warnings = @linter.lint(@taxon)
 
+        expect(warnings).to contain_exactly(
+          "Accordion subsection 'Subsection' has 0 content items tagged"
+        )
+
+      end
+
+      it 'does not warn for taxons with 5 content item' do
+        @taxon.body_html = body_html_with_subsection_content_items(5)
+
+        warnings = @linter.lint(@taxon)
+
+        expect(warnings).to be_empty
+      end
     end
 
-    it 'does not warn for taxons with 5 content item' do
-      @taxon.body_html = body_html_with_subsection_content_items(5)
-      linter = Linters::Taxons::AccordionCountLinter.new
+    context 'with a linter checking for >20 content items' do
+      before(:each) do
+        @linter = Linters::Taxons::AccordionCountLinter.new { |count| count > 20 }
+      end
 
-      warnings = linter.lint(@taxon)
+      it 'does not warn for taxons with 5 content item' do
+        @taxon.body_html = body_html_with_subsection_content_items(5)
 
-      expect(warnings).to be_empty
-    end
+        warnings = @linter.lint(@taxon)
 
-    it 'warns for taxons with 25 content items' do
-      @taxon.body_html = body_html_with_subsection_content_items(25)
-      linter = Linters::Taxons::AccordionCountLinter.new
+        expect(warnings).to be_empty
+      end
 
-      warnings = linter.lint(@taxon)
+      it 'warns for taxons with 25 content items' do
+        @taxon.body_html = body_html_with_subsection_content_items(25)
 
-      expect(warnings).to contain_exactly(
-        "Accordion subsection 'Subsection' has 25 content items tagged"
-      )
+        warnings = @linter.lint(@taxon)
+
+        expect(warnings).to contain_exactly(
+          "Accordion subsection 'Subsection' has 25 content items tagged"
+        )
+      end
     end
   end
 
@@ -62,13 +79,18 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
       )
     end
 
-    it 'does not warn for taxons with 0 content items' do
-      @taxon.body_html = body_html_with_subsection_content_items(0)
-      linter = Linters::Taxons::AccordionCountLinter.new
+    context 'with a linter checking for ==0 content items' do
+      before(:each) do
+        @linter = Linters::Taxons::AccordionCountLinter.new { |count| count == 0 }
+      end
 
-      warnings = linter.lint(@taxon)
+      it 'does not warn for taxons with 0 content items' do
+        @taxon.body_html = body_html_with_subsection_content_items(0)
 
-      expect(warnings).to be_empty
+        warnings = @linter.lint(@taxon)
+
+        expect(warnings).to be_empty
+      end
     end
   end
 
@@ -80,13 +102,18 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
       )
     end
 
-    it 'does not warn for taxons with 0 content items' do
-      @taxon.body_html = body_html_with_subsection_content_items(0)
-      linter = Linters::Taxons::AccordionCountLinter.new
+    context 'with a linter checking for ==0 content items' do
+      before(:each) do
+        @linter = Linters::Taxons::AccordionCountLinter.new { |count| count == 0 }
+      end
 
-      warnings = linter.lint(@taxon)
+      it 'does not warn for taxons with 0 content items' do
+        @taxon.body_html = body_html_with_subsection_content_items(0)
 
-      expect(warnings).to be_empty
+        warnings = @linter.lint(@taxon)
+
+        expect(warnings).to be_empty
+      end
     end
   end
 

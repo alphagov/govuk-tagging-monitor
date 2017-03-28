@@ -1,6 +1,6 @@
 module Linters
   module Taxons
-    class AccordionCountLinter
+    class AccordionCountLinter < CountLinter
       def lint(taxon)
         return [] unless is_accordion?(taxon)
 
@@ -8,8 +8,7 @@ module Linters
         subsections.each_with_object([]) do |subsection, warnings|
           number_of_content_items = subsection.css('.subsection-content ol li a').count
 
-          # AKG TODO: Move these numbers into a config?
-          if number_of_content_items == 0 || number_of_content_items > 20
+          if @warn_if_count_evaluates_true.call(number_of_content_items)
             subsection_title = subsection.css('.subsection-title').text
             warnings << "Accordion subsection '#{subsection_title}' has #{number_of_content_items} content items tagged"
           end
