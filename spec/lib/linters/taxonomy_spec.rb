@@ -220,5 +220,9 @@ RSpec.describe Linters::Taxonomy, '#lint' do
     def visited_base_paths
       visited_taxons.map { |taxon| taxon.base_path }
     end
+
+    def name
+      self.class.name
+    end
   end
 end

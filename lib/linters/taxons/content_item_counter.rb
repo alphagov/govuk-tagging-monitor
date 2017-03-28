@@ -17,11 +17,21 @@ module Linters
         end
       end
 
-      # Returns the number of content items tagged to a taxon. For a leaf page, this is
-      # all of its content items. For a grid, this is the items tagged beneath the grid.
-      # This should return 0 for an accordion (where content tagged to the taxon is hidden
-      # in the accordion itself).
+      # Returns the number of content items tagged to a taxon.
+      # Grid pages: number of content items tagged beneath the grid
+      # Accordion pages: number of content items tagged to the first accordion subsection
+      # Leaf pages: number of all its content items
       def self.tagged_to_taxon(taxon)
+        if taxon.is_accordion?
+          subsections = ContentItemCounter.accordion(taxon)
+          subsections.empty? ? 0 : subsections.first[:number_of_items]
+        else
+          ContentItemCounter.tagged_to_leaf(taxon)
+        end
+      end
+
+      # Returns the number of content items tagged to a leaf or beneath a grid
+      def self.tagged_to_leaf(taxon)
         taxon.body_html.css('.topic-content ol li a').count
       end
     end
