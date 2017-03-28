@@ -23,8 +23,8 @@ namespace :lint do
 
     if warnings.any?
       message_payload = {
-        username: 'Sad Parrot',
-        icon_emoji: ':sadparrot:',
+        username: 'Disappointed Parrot',
+        icon_emoji: ':bored_parrot:',
         text: "#{summary}\n\n#{warnings.join("\n")}",
         mrkdwn: true,
         channel: '#finding-things',
