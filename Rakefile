@@ -1,14 +1,14 @@
 require_relative './lib/requires'
 require_relative './lib/tasks/lint/high_priority'
+require_relative './lib/tasks/lint/low_priority'
 
-task run: %i[global_stats navigation_page_quality]
+namespace :check do
+  task high_priority: %i[global_stats lint:high_priority]
+  task low_priority: %i[lint:low_priority]
+end
 
 task :global_stats do
   GlobalStats.new.run
-end
-
-task :navigation_page_quality do
-  NavigationPageQuality.new.run
 end
 
 begin

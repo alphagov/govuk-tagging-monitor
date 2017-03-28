@@ -1,9 +1,9 @@
 namespace :lint do
   desc <<-DESC
-    Perform high-priority linting tasks on the taxonomy. The results are output to the console,
-    and also posted to the #finding-things Slack channel as the "Sad Parrot"
+    Perform low-priority linting tasks on the taxonomy. The results are output to the console,
+    and also posted to the #finding-things Slack channel as the "Disappointed Parrot"
   DESC
-  task :high_priority do
+  task :low_priority do
     include StatsHelpers
 
     taxonomy = Linters::Taxonomy.new('/education')
@@ -11,11 +11,11 @@ namespace :lint do
     gauge 'navigation_pages.count', taxonomy.size
 
     warnings = taxonomy.lint([
-      Linters::Taxons::AccordionCountLinter.warn_if_equal_to(0),
-      Linters::Taxons::LeafCountLinter.warn_if_equal_to(0),
+      Linters::Taxons::AccordionCountLinter.warn_if_greater_than(25),
+      Linters::Taxons::LeafCountLinter.warn_if_greater_than(25),
       Linters::Taxons::DepthCountLinter.new do |d|
-        d.depth = 0
-        d.count_linter = Linters::Taxons::CountLinter.warn_if_greater_than(0)
+        d.depth = 1
+        d.count_linter = Linters::Taxons::CountLinter.warn_if_greater_than(5)
       end,
     ])
 

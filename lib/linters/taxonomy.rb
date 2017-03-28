@@ -38,6 +38,8 @@ module Linters
     end
 
     def size
+      return @size unless @size.nil?
+
       count = 0
       queue = [root_taxon]
 
@@ -47,7 +49,7 @@ module Linters
         taxon.child_taxons.each { |child_taxon| queue << child_taxon }
       end
 
-      count
+      @size = count
     end
 
     private
