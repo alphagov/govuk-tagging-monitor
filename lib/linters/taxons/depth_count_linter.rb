@@ -3,7 +3,7 @@ module Linters
     class DepthCountLinter < CountLinter
       def initialize(depth, &block)
         @depth = depth
-        super(block)
+        super(&block)
       end
 
       def self.at_depth(depth, &block)

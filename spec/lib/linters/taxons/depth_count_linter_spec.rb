@@ -21,7 +21,7 @@ RSpec.describe Linters::Taxons::DepthCountLinter, '#lint' do
         warnings = @linter.lint(@taxon)
 
         expect(warnings).to contain_exactly(
-          '0 content items tagged'
+          '1 content items tagged'
         )
 
       end
@@ -37,7 +37,7 @@ RSpec.describe Linters::Taxons::DepthCountLinter, '#lint' do
 
     context 'with a linter checking for >0 content items at depth 1' do
       before(:each) do
-        @linter = Linters::Taxons::DepthCountLinter.at_depth(0) { |count| count > 0 }
+        @linter = Linters::Taxons::DepthCountLinter.at_depth(1) { |count| count > 0 }
       end
 
       it 'does not warn for taxons with 1 content item' do
@@ -71,7 +71,7 @@ RSpec.describe Linters::Taxons::DepthCountLinter, '#lint' do
         warnings = @linter.lint(@taxon)
 
         expect(warnings).to contain_exactly(
-          '0 content items tagged'
+          '1 content items tagged'
         )
 
       end
