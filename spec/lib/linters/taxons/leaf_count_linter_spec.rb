@@ -12,7 +12,7 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
 
     context 'with a linter checking for ==0 content items' do
       before(:each) do
-        @linter = Linters::Taxons::LeafCountLinter.new { |count| count == 0 }
+        @linter = Linters::Taxons::LeafCountLinter.warn_if_equal_to(0)
       end
 
       it 'warns for taxons with 0 content items' do
@@ -21,7 +21,7 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
         warnings = @linter.lint(@taxon)
 
         expect(warnings).to contain_exactly(
-          '0 content items tagged'
+          '0 content items tagged (which is ==0)'
         )
 
       end
@@ -37,7 +37,7 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
 
     context 'with a linter checking for >20 content items' do
       before(:each) do
-        @linter = Linters::Taxons::LeafCountLinter.new { |count| count > 20 }
+        @linter = Linters::Taxons::LeafCountLinter.warn_if_greater_than(20)
       end
 
       it 'does not warn for taxons with 5 content item' do
@@ -54,7 +54,7 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
         warnings = @linter.lint(@taxon)
 
         expect(warnings).to contain_exactly(
-          '25 content items tagged'
+          '25 content items tagged (which is >20)'
         )
       end
     end
@@ -73,7 +73,7 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
 
     context 'with a linter checking for ==0 content items' do
       before(:each) do
-        @linter = Linters::Taxons::LeafCountLinter.new { |count| count == 0 }
+        @linter = Linters::Taxons::LeafCountLinter.warn_if_equal_to(0)
       end
 
       it 'does not warn for taxons with 0 content items' do

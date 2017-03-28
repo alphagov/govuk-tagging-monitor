@@ -14,7 +14,7 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
 
     context 'with a linter checking for ==0 content items' do
       before(:each) do
-        @linter = Linters::Taxons::AccordionCountLinter.new { |count| count == 0 }
+        @linter = Linters::Taxons::AccordionCountLinter.warn_if_equal_to(0)
       end
 
       it 'warns for subsections with 0 content items' do
@@ -23,7 +23,7 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
         warnings = @linter.lint(@taxon)
 
         expect(warnings).to contain_exactly(
-          "Accordion subsection 'Subsection' has 0 content items tagged"
+          "Accordion subsection 'Subsection' has 0 content items tagged (which is ==0)"
         )
 
       end
@@ -39,7 +39,7 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
 
     context 'with a linter checking for >20 content items' do
       before(:each) do
-        @linter = Linters::Taxons::AccordionCountLinter.new { |count| count > 20 }
+        @linter = Linters::Taxons::AccordionCountLinter.warn_if_greater_than(20)
       end
 
       it 'does not warn for taxons with 5 content item' do
@@ -56,7 +56,7 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
         warnings = @linter.lint(@taxon)
 
         expect(warnings).to contain_exactly(
-          "Accordion subsection 'Subsection' has 25 content items tagged"
+          "Accordion subsection 'Subsection' has 25 content items tagged (which is >20)"
         )
       end
     end
@@ -81,7 +81,7 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
 
     context 'with a linter checking for ==0 content items' do
       before(:each) do
-        @linter = Linters::Taxons::AccordionCountLinter.new { |count| count == 0 }
+        @linter = Linters::Taxons::AccordionCountLinter.warn_if_equal_to(0)
       end
 
       it 'does not warn for taxons with 0 content items' do
@@ -104,7 +104,7 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
 
     context 'with a linter checking for ==0 content items' do
       before(:each) do
-        @linter = Linters::Taxons::AccordionCountLinter.new { |count| count == 0 }
+        @linter = Linters::Taxons::AccordionCountLinter.warn_if_equal_to(0)
       end
 
       it 'does not warn for taxons with 0 content items' do

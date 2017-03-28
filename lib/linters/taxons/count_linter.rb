@@ -1,7 +1,10 @@
 module Linters
   module Taxons
     class CountLinter
-      def initialize(&block)
+      attr_reader :warn_if_count_evaluates_true
+      attr_reader :predicate_summary
+
+      def initialize(predicate_summary = nil, &block)
         if block.nil?
           raise <<-BLOCK
             Please initialize #{self.class.name} with a block. This block should be a
@@ -17,6 +20,21 @@ module Linters
         end
 
         @warn_if_count_evaluates_true = block
+        @predicate_summary = predicate_summary
+      end
+
+      def self.warn_if_equal_to(number)
+        self.new("==#{number}") { |count| count == number }
+      end
+
+      def self.warn_if_greater_than(number)
+        self.new(">#{number}") { |count| count > number }
+      end
+
+      def name
+        n = self.class.name
+        n += " #{@predicate_summary}" unless @predicate_summary.nil?
+        n
       end
     end
   end
