@@ -1,8 +1,17 @@
 module Linters
   module Taxons
-    class LeafCountLinter < CountLinter
+    class DepthCountLinter < CountLinter
+      def initialize(depth, &block)
+        @depth = depth
+        super(block)
+      end
+
+      def self.at_depth(depth, &block)
+        DepthCountLinter.new(depth, &block)
+      end
+
       def lint(taxon)
-        return [] unless is_leaf?(taxon)
+        return [] unless taxon.depth == @depth
 
         number_of_content_items = ContentItemCounter.tagged_to_taxon(taxon)
 
@@ -11,10 +20,6 @@ module Linters
         else
           []
         end
-      end
-
-      def is_leaf?(taxon)
-         taxon.child_taxons.empty?
       end
     end
   end
