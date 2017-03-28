@@ -1,17 +1,30 @@
 module Linters
   module Taxons
     class DepthCountLinter
+      # Depth of the taxonomy at which this linter is supposed to operate.
+      # depth == 0 # Operate on root taxon
+      # depth == 1 # Operate on root taxon's children
+      # etc.
       attr_accessor :depth
       attr_accessor :count_linter
 
       def initialize
         yield self
-        raise 'depth must be set' if self.depth.nil?
-        raise 'count_linter must be set' if self.count_linter.nil?
+
+        if self.depth.nil? || self.count_linter.nil?
+          raise <<-ERROR
+            depth and count_linter must both be set using a constructor block, such as:
+
+              #{self.class.name}.new do |d|
+                d.depth = 0
+                d.count_linter = Linters::Taxons::CountLinter.warn_if_equal_to(0)
+              end
+          ERROR
+        end
       end
 
       def lint(taxon)
-        return [] unless taxon.depth == @depth
+        return [] unless taxon.depth == depth
 
         number_of_content_items = ContentItemCounter.tagged_to_taxon(taxon)
 

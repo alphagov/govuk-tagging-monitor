@@ -37,6 +37,7 @@ module Linters
       lint_taxon_and_descendants(linters, root_taxon)
     end
 
+    # Returns the number of taxons in the taxonomy
     def size
       return @size unless @size.nil?
 
@@ -52,7 +53,8 @@ module Linters
       @size = count
     end
 
-    private
+  private
+
     def lint_taxon_and_descendants(linters, taxon)
       warnings = [lint_taxon(linters, taxon)]
       warnings += taxon.child_taxons.map do |child_taxon|
