@@ -1,4 +1,5 @@
 require_relative './lib/requires'
+require_relative './lib/tasks/lint/high_priority'
 
 task run: %i[global_stats navigation_page_quality]
 
