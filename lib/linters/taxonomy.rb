@@ -42,7 +42,7 @@ module Linters
         lint_taxon_and_descendants(linters, child_taxon)
       end
 
-      warnings.flatten
+      warnings.flatten.reject { |warning| warning.nil? }
     end
 
     def lint_taxon(linters, taxon)
@@ -50,19 +50,24 @@ module Linters
       taxon.body_html = Nokogiri::HTML(
         HTTP.get("https://www.gov.uk#{taxon.base_path}"))
 
-      warnings_by_linter = linters.map do |linter|
-        {
-          linter: linter.class.name,
-          warnings: linter.lint(taxon),
-        }
+      warnings_by_linter = linters.each_with_object([]) do |linter, linter_warnings|
+        warnings = linter.lint(taxon)
+        if warnings.any?
+          linter_warnings << {
+            linter: linter.class.name,
+            warnings: linter.lint(taxon),
+          }
+        end
       end
 
-      {
-        taxon: {
-          base_path: taxon.base_path,
-        },
-        warnings_by_linter: warnings_by_linter,
-      }
+      if warnings_by_linter.any?
+        {
+          taxon: {
+            base_path: taxon.base_path,
+          },
+          warnings_by_linter: warnings_by_linter,
+        }
+      end
     end
 
     def root_taxon
