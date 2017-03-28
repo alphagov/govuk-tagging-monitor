@@ -20,19 +20,7 @@ module Linters
     # Visits the entire taxonomy including and under the given taxon base path.
     # At each taxon, each of the linters provided in TaxonomyLinter#initialize
     # will have its #lint method called on the taxon.
-    # The return value is an array of taxons and their warnings in the following
-    # structure:
-    # {
-    #   taxon: 'base_path',
-    #   warnings_by_linter: [
-    #     {
-    #       linter: 'LinterClassName',
-    #       warnings: [
-    #         'warning'
-    #       ]
-    #     }
-    #   ]
-    # }
+    # The return value is an array of warnings.
     def lint(linters)
       lint_taxon_and_descendants(linters, root_taxon)
     end
@@ -61,7 +49,7 @@ module Linters
         lint_taxon_and_descendants(linters, child_taxon)
       end
 
-      warnings.flatten.reject { |warning| warning.nil? }
+      warnings.flatten
     end
 
     def lint_taxon(linters, taxon)
@@ -71,29 +59,18 @@ module Linters
       taxon.body_html = Nokogiri::HTML(
         HTTP.get("https://www.gov.uk#{taxon.base_path}"))
 
-      warnings_by_linter = linters.each_with_object([]) do |linter, linter_warnings|
+      linters.each_with_object([]) do |linter, linter_warnings|
         puts "  #{linter.name}"
         warnings = linter.lint(taxon)
+
         if warnings.any?
           warnings.each do |warning|
-            puts "    #{warning}".red
+            puts "    ✗ #{warning}".red
+            linter_warnings << "#{taxon.base_path}: #{warning}"
           end
-          linter_warnings << {
-            linter: linter.name,
-            warnings: linter.lint(taxon),
-          }
         else
-          puts "    OK".green
+          puts "    ✓ OK".green
         end
-      end
-
-      if warnings_by_linter.any?
-        {
-          taxon: {
-            base_path: taxon.base_path,
-          },
-          warnings_by_linter: warnings_by_linter,
-        }
       end
     end
 

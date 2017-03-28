@@ -113,24 +113,8 @@ RSpec.describe Linters::Taxonomy, '#lint' do
 
         expect(warnings_by_taxon).to eq(
           [
-            {
-              taxon: {
-                base_path: '/root_taxon',
-              },
-              warnings_by_linter: [
-                linter: 'LinterSpy',
-                warnings: ['/root_taxon linted'],
-              ],
-            },
-            {
-              taxon: {
-                base_path: '/child_taxon',
-              },
-              warnings_by_linter: [
-                linter: 'LinterSpy',
-                warnings: ['/child_taxon linted'],
-              ],
-            },
+            '/root_taxon: /root_taxon linted',
+            '/child_taxon: /child_taxon linted',
           ]
         )
       end

@@ -19,28 +19,24 @@ namespace :lint do
       end,
     ])
 
-    slack_friendly_warnings = warnings.each_with_object([]) do |warning, slack_warnings|
-      warning[:warnings_by_linter].each do |linter_warnings|
-        linter_warnings[:warnings].each do |linter_warning|
-          slack_warnings << "#{warning[:taxon][:base_path]}: #{linter_warning}"
-        end
-      end
-    end
+    summary = "#{taxonomy.size} taxons checked, #{warnings.size} issues found"
 
-    puts "#{taxonomy.size} taxons checked, #{slack_friendly_warnings.size} issues found"
-
-    if slack_friendly_warnings.any?
+    if warnings.any?
       message_payload = {
         username: 'Sad Parrot',
         icon_emoji: ':sadparrot:',
-        text: "Oh no, there's a problem with some navigation pages:\n\n#{slack_friendly_warnings.join("\n")}",
+        text: "#{summary}\n\n#{warnings.join("\n")}",
         mrkdwn: true,
         channel: '#finding-things',
       }
 
       HTTP.post(ENV["BADGER_SLACK_WEBHOOK_URL"], body: JSON.dump(message_payload))
 
-      puts JSON.pretty_generate(warnings)
+      puts message_payload[:text]
+
+      puts summary.red
+    else
+      puts summary.green
     end
   end
 end
