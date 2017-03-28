@@ -8,13 +8,14 @@ RSpec.describe Linters::Taxonomy, '#lint' do
 
       stub_request(:get, %r(https://www\.gov\.uk/(?!api/)))
         .to_return(body: '')
+
+      @taxonomy_linter = Linters::Taxonomy.from_root_taxon_base_path('/root_taxon')
     end
 
     it 'lints each taxon' do
       linter_spy = LinterSpy.new
-      taxonomy_linter = Linters::Taxonomy.new(linters: [linter_spy])
 
-      taxonomy_linter.lint('/root_taxon')
+      @taxonomy_linter.lint([linter_spy])
 
       expect(linter_spy.visited_base_paths).to contain_exactly(
         '/root_taxon',
@@ -28,9 +29,8 @@ RSpec.describe Linters::Taxonomy, '#lint' do
 
     it 'correctly records depths' do
       linter_spy = LinterSpy.new
-      taxonomy_linter = Linters::Taxonomy.new(linters: [linter_spy])
 
-      taxonomy_linter.lint('/root_taxon')
+      @taxonomy_linter.lint([linter_spy])
 
       visited_taxons_and_depths = linter_spy.visited_taxons.map do |taxon|
         {
@@ -72,15 +72,11 @@ RSpec.describe Linters::Taxonomy, '#lint' do
       linter_spy_2 = LinterSpy.new
       linter_spy_3 = LinterSpy.new
 
-      taxonomy_linter = Linters::Taxonomy.new(
-        linters: [
-          linter_spy_1,
-          linter_spy_2,
-          linter_spy_3,
-        ]
-      )
-
-      taxonomy_linter.lint('/root_taxon')
+      @taxonomy_linter.lint([
+        linter_spy_1,
+        linter_spy_2,
+        linter_spy_3
+      ])
 
       expect(linter_spy_1.visited_base_paths).to contain_exactly(
         '/root_taxon',
@@ -103,16 +99,14 @@ RSpec.describe Linters::Taxonomy, '#lint' do
 
       stub_request(:get, %r(https://www\.gov\.uk/(?!api/)))
         .to_return(body: '')
+
+      @taxonomy_linter = Linters::Taxonomy.from_root_taxon_base_path('/root_taxon')
     end
 
     it 'returns an array of taxons and their warnings' do
       linter = LinterSpy.new
 
-      taxonomy_linter = Linters::Taxonomy.new(
-        linters: [linter]
-      )
-
-      warnings_by_taxon = taxonomy_linter.lint('/root_taxon')
+      warnings_by_taxon = @taxonomy_linter.lint([linter])
 
       expect(warnings_by_taxon).to eq(
         [

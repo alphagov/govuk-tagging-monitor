@@ -1,14 +1,18 @@
 module Linters
   class Taxonomy
-    attr_reader :linters
+    attr_reader :root_taxon_base_path
     attr_reader :warnings
 
     # The constructor for this class expects an array of Linter objects. These objects
     # must have a #lint method, which accepts a Taxon and returns an array of warnings
     # about that taxon
-    def initialize(linters: [])
-      @linters = linters
+    def initialize(root_taxon_base_path)
+      @root_taxon_base_path = root_taxon_base_path
       @warnings = []
+    end
+
+    def self.from_root_taxon_base_path(root_taxon_base_path)
+      Taxonomy.new(root_taxon_base_path)
     end
 
     # Visits the entire taxonomy including and under the given taxon base path.
@@ -27,21 +31,21 @@ module Linters
     #     }
     #   ]
     # }
-    def lint(root_taxon_base_path)
-      lint_taxon_and_descendants(root_taxon(root_taxon_base_path))
+    def lint(linters)
+      lint_taxon_and_descendants(linters, root_taxon)
     end
 
     private
-    def lint_taxon_and_descendants(taxon)
-      warnings = [lint_taxon(taxon)]
+    def lint_taxon_and_descendants(linters, taxon)
+      warnings = [lint_taxon(linters, taxon)]
       warnings += taxon.child_taxons.map do |child_taxon|
-        lint_taxon_and_descendants(child_taxon)
+        lint_taxon_and_descendants(linters, child_taxon)
       end
 
       warnings.flatten
     end
 
-    def lint_taxon(taxon)
+    def lint_taxon(linters, taxon)
       taxon = taxon.clone
       taxon.body_html = Nokogiri::HTML(
         HTTP.get("https://www.gov.uk#{taxon.base_path}"))
@@ -61,7 +65,7 @@ module Linters
       }
     end
 
-    def root_taxon(root_taxon_base_path)
+    def root_taxon
       root_taxon_content_item = HTTP.get_json("https://www.gov.uk/api/content#{root_taxon_base_path}")
 
       Taxon.new(

@@ -68,7 +68,7 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
     html_string = '<div class="topic-content"><ol>'
 
     number_of_content_items.times do
-      html_string += '<li>Content Item</li>'
+      html_string += '<li><a href>Content Item</a></li>'
     end
 
     html_string += '</ol></div>'
