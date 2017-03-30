@@ -4,9 +4,13 @@ module HTTP
     "Rate-Limit-Token" => ENV['RATE_LIMIT_TOKEN'],
   }
 
+  def self.get_json(url)
+    response = HTTP.get(url)
+    JSON.parse(response)
+  end
+
   def self.get(url)
-    response = Typhoeus.get(url, headers: HEADERS)
-    JSON.parse(response.body)
+    Typhoeus.get(url, headers: HEADERS).body
   end
 
   def self.post(url, body:)
