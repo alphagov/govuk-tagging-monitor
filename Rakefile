@@ -11,7 +11,7 @@ task :global_stats do
   GlobalStats.new.run
 end
 
-task run: %i[high_priority]
+task run: %i[check:high_priority]
 
 begin
   require 'rspec/core/rake_task'
