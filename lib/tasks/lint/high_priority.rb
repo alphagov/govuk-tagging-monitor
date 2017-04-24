@@ -1,7 +1,7 @@
 namespace :lint do
   desc <<-DESC
     Perform high-priority linting tasks on the taxonomy. The results are output to the console,
-    and also posted to the #finding-things Slack channel as the "Sad Parrot"
+    and also posted to the #navigation Slack channel as the "Sad Parrot"
   DESC
   task :high_priority do
     include StatsHelpers
@@ -27,7 +27,7 @@ namespace :lint do
         icon_emoji: ':sadparrot:',
         text: "#{summary}\n\n#{warnings.join("\n")}",
         mrkdwn: true,
-        channel: '#finding-things',
+        channel: '#navigation',
       }
 
       HTTP.post(ENV["BADGER_SLACK_WEBHOOK_URL"], body: JSON.dump(message_payload))
