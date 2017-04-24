@@ -12,7 +12,7 @@ It [runs every hour on Jenkins][jenkins].
 The project consists of a single rake task. This will:
 
 - Check the navigation pages. In certain cases it will report warnings to
-  the `#finding-things` Slack channel.
+  the `#navigation` Slack channel.
 - Send basic stats to our `statsd` instance. These stats are used on a
   [grafana dashboard][dashboard].
 
