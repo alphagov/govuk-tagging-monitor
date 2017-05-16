@@ -6,11 +6,11 @@ namespace :lint do
   task :low_priority do
     include StatsHelpers
 
-    taxonomy = Linters::Taxonomy.new('/education')
+    linter = Linters::TaxonomyLinter.new('/education')
 
-    gauge 'navigation_pages.count', taxonomy.size
+    gauge 'navigation_pages.count', linter.size
 
-    warnings = taxonomy.lint([
+    warnings = linter.lint([
       Linters::Taxons::AccordionCountLinter.warn_if_greater_than(25),
       Linters::Taxons::LeafCountLinter.warn_if_greater_than(25),
       Linters::Taxons::DepthCountLinter.new do |d|
@@ -19,7 +19,7 @@ namespace :lint do
       end,
     ])
 
-    summary = "#{taxonomy.size} taxons checked, #{warnings.size} issues found"
+    summary = "#{linter.size} taxons checked, #{warnings.size} issues found"
 
     if warnings.any?
       message_payload = {
