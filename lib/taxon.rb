@@ -1,7 +1,17 @@
-Taxon = Struct.new('Taxon', :base_path, :depth, :child_taxons, :body_html) do
+Taxon = Struct.new('Taxon', :base_path, :depth, :child_taxons) do
   def initialize(*)
     super
     self.child_taxons ||= []
+  end
+
+  def body_html=(body_html)
+    @body_html = body_html
+  end
+
+  def body_html
+    @body_html ||= Nokogiri::HTML(
+      HTTP.get("https://www.gov.uk#{base_path}")
+    )
   end
 
   def is_leaf?
@@ -18,5 +28,15 @@ Taxon = Struct.new('Taxon', :base_path, :depth, :child_taxons, :body_html) do
 
   def does_not_have_grandchildren?
     !has_grandchildren?
+  end
+
+  def navigation_page_type
+    if is_leaf?
+      'leaf'
+    elsif is_accordion?
+      'accordion'
+    else
+      'grid'
+    end
   end
 end

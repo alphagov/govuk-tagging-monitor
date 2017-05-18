@@ -18,18 +18,18 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
       end
 
       it 'warns for subsections with 0 content items' do
-        @taxon.body_html = body_html_with_subsection_content_items(0)
+        @taxon.body_html = BodyHtml.with_accordion_content_items(number_of_sections: 1, number_of_content_items: 0)
 
         warnings = @linter.lint(@taxon)
 
         expect(warnings).to contain_exactly(
-          "Accordion subsection 'Subsection' has 0 content items tagged (which is ==0)"
+          "Accordion subsection 'Subsection 0' has 0 content items tagged (which is ==0)"
         )
 
       end
 
       it 'does not warn for taxons with 5 content item' do
-        @taxon.body_html = body_html_with_subsection_content_items(5)
+        @taxon.body_html = BodyHtml.with_accordion_content_items(number_of_sections: 1,number_of_content_items: 5)
 
         warnings = @linter.lint(@taxon)
 
@@ -43,7 +43,7 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
       end
 
       it 'does not warn for taxons with 5 content item' do
-        @taxon.body_html = body_html_with_subsection_content_items(5)
+        @taxon.body_html = BodyHtml.with_accordion_content_items(number_of_sections: 1, number_of_content_items: 5)
 
         warnings = @linter.lint(@taxon)
 
@@ -51,12 +51,12 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
       end
 
       it 'warns for taxons with 25 content items' do
-        @taxon.body_html = body_html_with_subsection_content_items(25)
+        @taxon.body_html = BodyHtml.with_accordion_content_items(number_of_sections: 1, number_of_content_items: 25)
 
         warnings = @linter.lint(@taxon)
 
         expect(warnings).to contain_exactly(
-          "Accordion subsection 'Subsection' has 25 content items tagged (which is >20)"
+          "Accordion subsection 'Subsection 0' has 25 content items tagged (which is >20)"
         )
       end
     end
@@ -85,7 +85,7 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
       end
 
       it 'does not warn for taxons with 0 content items' do
-        @taxon.body_html = body_html_with_subsection_content_items(0)
+        @taxon.body_html = BodyHtml.with_accordion_content_items(number_of_sections: 0, number_of_content_items: 0)
 
         warnings = @linter.lint(@taxon)
 
@@ -108,33 +108,12 @@ RSpec.describe Linters::Taxons::AccordionCountLinter, '#lint' do
       end
 
       it 'does not warn for taxons with 0 content items' do
-        @taxon.body_html = body_html_with_subsection_content_items(0)
+        @taxon.body_html = BodyHtml.with_accordion_content_items(number_of_sections: 0, number_of_content_items: 0)
 
         warnings = @linter.lint(@taxon)
 
         expect(warnings).to be_empty
       end
     end
-  end
-
-  def body_html_with_subsection_content_items(number_of_content_items)
-    html_string =
-      '<div class="topic-content">
-        <div class="subsection">
-          <div class="subsection-title">Subsection</div>
-          <div class="subsection-content">
-            <ol>'
-
-    number_of_content_items.times do
-      html_string += '<li><a href>Content Item</a></li>'
-    end
-
-    html_string +=
-            '</ol>
-          </div>
-        </div>
-      </div>'
-
-    Nokogiri::HTML(html_string)
   end
 end

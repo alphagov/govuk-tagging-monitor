@@ -1,5 +1,6 @@
 require 'webmock/rspec'
 require_relative './../lib/requires'
+require_relative 'lib/helpers/body_html'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

@@ -16,7 +16,7 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
       end
 
       it 'warns for taxons with 0 content items' do
-        @taxon.body_html = body_html_with_content_items(0)
+        @taxon.body_html = BodyHtml.with_content_items(number_of_content_items: 0)
 
         warnings = @linter.lint(@taxon)
 
@@ -27,7 +27,7 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
       end
 
       it 'does not warn for taxons with 5 content item' do
-        @taxon.body_html = body_html_with_content_items(5)
+        @taxon.body_html = BodyHtml.with_content_items(number_of_content_items: 5)
 
         warnings = @linter.lint(@taxon)
 
@@ -41,7 +41,7 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
       end
 
       it 'does not warn for taxons with 5 content item' do
-        @taxon.body_html = body_html_with_content_items(5)
+        @taxon.body_html = BodyHtml.with_content_items(number_of_content_items: 5)
 
         warnings = @linter.lint(@taxon)
 
@@ -49,7 +49,7 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
       end
 
       it 'warns for taxons with 25 content items' do
-        @taxon.body_html = body_html_with_content_items(25)
+        @taxon.body_html = BodyHtml.with_content_items(number_of_content_items: 25)
 
         warnings = @linter.lint(@taxon)
 
@@ -77,24 +77,12 @@ RSpec.describe Linters::Taxons::LeafCountLinter, '#lint' do
       end
 
       it 'does not warn for taxons with 0 content items' do
-        @taxon.body_html = body_html_with_content_items(0)
+        @taxon.body_html = BodyHtml.with_content_items(number_of_content_items: 0)
 
         warnings = @linter.lint(@taxon)
 
         expect(warnings).to be_empty
       end
     end
-  end
-
-  def body_html_with_content_items(number_of_content_items)
-    html_string = '<div class="topic-content"><ol>'
-
-    number_of_content_items.times do
-      html_string += '<li><a href>Content Item</a></li>'
-    end
-
-    html_string += '</ol></div>'
-
-    Nokogiri::HTML(html_string)
   end
 end

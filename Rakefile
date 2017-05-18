@@ -1,6 +1,7 @@
 require_relative './lib/requires'
 require_relative './lib/tasks/lint/high_priority'
 require_relative './lib/tasks/lint/low_priority'
+require_relative './lib/tasks/analyse/links'
 
 namespace :check do
   task high_priority: %i[global_stats lint:high_priority]

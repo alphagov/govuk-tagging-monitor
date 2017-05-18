@@ -8,11 +8,11 @@ module Linters
       #   number_of_items: 0  # number of content items in the subsection
       # }
       def self.accordion(taxon)
-        subsections = taxon.body_html.css('.topic-content .subsection')
+        subsections = taxon.body_html.css(CssSelector.for(:accordion_subsection))
         subsections.map do |subsection|
           {
-            title: subsection.css('.subsection-title').text,
-            number_of_items: subsection.css('.subsection-content ol li a').count,
+            title: subsection.css(CssSelector.for(:accordion_subsection_title)).text.strip,
+            number_of_items: subsection.css(CssSelector.for(:accordion_content_item_links)).count,
           }
         end
       end
@@ -32,7 +32,7 @@ module Linters
 
       # Returns the number of content items tagged to a leaf or beneath a grid
       def self.tagged_to_leaf(taxon)
-        taxon.body_html.css('.topic-content ol li a').count
+        taxon.body_html.css(CssSelector.for(:leaf_content_item_links)).count
       end
     end
   end
