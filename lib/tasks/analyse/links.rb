@@ -1,5 +1,6 @@
 require 'uri'
 require 'google_drive'
+require 'json'
 
 namespace :analyse do
   desc <<-DESC
@@ -29,6 +30,8 @@ namespace :analyse do
 
     puts '=== DONE ==='
     puts "Results saved to: #{spreadsheet.human_url}"
+
+    post_url_to_slack(spreadsheet.human_url)
   end
 
   def href_to_path!(results)
@@ -168,5 +171,11 @@ namespace :analyse do
 
   def human_friendly(headers)
     headers.map { |header| header.to_s.tr('_', ' ').capitalize }
+  end
+
+  def post_url_to_slack(url)
+    Notifiers::Slack.notify(
+      text: "Navigation link audit has been published here: #{url}",
+    )
   end
 end

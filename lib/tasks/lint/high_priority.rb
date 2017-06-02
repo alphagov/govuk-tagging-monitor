@@ -22,18 +22,15 @@ namespace :lint do
     summary = "#{linter.size} taxons checked, #{warnings.size} issues found"
 
     if warnings.any?
-      message_payload = {
+      notification_text = "#{summary}\n\n#{warnings.join("\n")}"
+
+      Notifiers::Slack.notify(
+        text: notification_text,
         username: 'Sad Parrot',
-        icon_emoji: ':sadparrot:',
-        text: "#{summary}\n\n#{warnings.join("\n")}",
-        mrkdwn: true,
-        channel: '#navigation',
-      }
+        emoji: ':sadparrot:',
+      )
 
-      HTTP.post(ENV["BADGER_SLACK_WEBHOOK_URL"], body: JSON.dump(message_payload))
-
-      puts message_payload[:text]
-
+      puts notification_text
       puts summary.red
     else
       puts summary.green
