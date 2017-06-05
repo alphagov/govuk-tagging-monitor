@@ -128,6 +128,8 @@ namespace :analyse do
       taxon_base_path
       section
       link_href
+      number_of_tags
+      taxon_base_paths
     ].freeze
   end
 

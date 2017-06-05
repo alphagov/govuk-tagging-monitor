@@ -28,13 +28,17 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
             taxon_base_path: '/root-taxon',
             link_href: '/taxon-0',
             navigation_page_type: 'grid',
-            section: 'grid'
+            section: 'grid',
+            number_of_tags: 'N/A',
+            taxon_base_paths: 'N/A'
           },
           {
             taxon_base_path: '/root-taxon',
             link_href: '/taxon-1',
             navigation_page_type: 'grid',
-            section: 'grid'
+            section: 'grid',
+            number_of_tags: 'N/A',
+            taxon_base_paths: 'N/A'
           },
         )
       end
@@ -53,25 +57,33 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
             taxon_base_path: '/root-taxon',
             link_href: '/taxon-0',
             navigation_page_type: 'grid',
-            section: 'grid'
+            section: 'grid',
+            number_of_tags: 'N/A',
+            taxon_base_paths: 'N/A'
           },
           {
             taxon_base_path: '/root-taxon',
             link_href: '/taxon-1',
             navigation_page_type: 'grid',
-            section: 'grid'
+            section: 'grid',
+            number_of_tags: 'N/A',
+            taxon_base_paths: 'N/A'
           },
           {
             taxon_base_path: '/root-taxon',
             link_href: '/content-item-0',
             navigation_page_type: 'grid',
-            section: 'leaf'
+            section: 'leaf',
+            number_of_tags: 1,
+            taxon_base_paths: 'taxon-0'
           },
           {
             taxon_base_path: '/root-taxon',
             link_href: '/content-item-1',
             navigation_page_type: 'grid',
-            section: 'leaf'
+            section: 'leaf',
+            number_of_tags: 1,
+            taxon_base_paths: 'taxon-1'
           },
         )
       end
@@ -101,13 +113,17 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
             taxon_base_path: '/root-taxon',
             link_href: '/content-item-0',
             navigation_page_type: 'leaf',
-            section: 'leaf'
+            section: 'leaf',
+            number_of_tags: 1,
+            taxon_base_paths: 'taxon-0'
           },
           {
             taxon_base_path: '/root-taxon',
             link_href: '/content-item-1',
             navigation_page_type: 'leaf',
-            section: 'leaf'
+            section: 'leaf',
+            number_of_tags: 1,
+            taxon_base_paths: 'taxon-1'
           },
         )
       end

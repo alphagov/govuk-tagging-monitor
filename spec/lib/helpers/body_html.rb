@@ -1,3 +1,5 @@
+require 'webmock'
+
 class BodyHtml
   def self.with_accordion_content_items(number_of_sections:, number_of_content_items:)
     html_string = ''
@@ -15,9 +17,20 @@ class BodyHtml
             <ol>"
 
       number_of_content_items.times do |content_item_index|
+        base_path = "/path-#{section_index}-#{content_item_index}"
+
+        content_item = {
+          'links' => {
+            'taxons' => [ 'base_path' => "taxon-#{section_index}" ]
+          }
+        }.to_json
+
+        WebMock.stub_request(:get, "https://www.gov.uk/api/content#{base_path}").
+          to_return(body: content_item)
+
         html_string +=
           "<li>
-            <a href='/path-#{section_index}-#{content_item_index}'>
+            <a href='#{base_path}'>
               Content Item #{section_index}-#{content_item_index}
             </a>
           </li>"
@@ -59,9 +72,19 @@ class BodyHtml
           <ol>"
 
     number_of_content_items.times do |content_item_index|
+      base_path = "/content-item-#{content_item_index}"
+      content_item = {
+        'links' => {
+          'taxons' => [ 'base_path' => "taxon-#{content_item_index}" ]
+        }
+      }.to_json
+
+      WebMock.stub_request(:get, "https://www.gov.uk/api/content#{base_path}").
+        to_return(body: content_item)
+
       html_string +=
         "<li>
-          <a href='/content-item-#{content_item_index}'>
+          <a href='#{base_path}'>
             Content Item #{content_item_index}
           </a>
         </li>"

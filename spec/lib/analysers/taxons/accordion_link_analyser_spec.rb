@@ -26,25 +26,33 @@ RSpec.describe Analysers::Taxons::AccordionLinkAnalyser, '#analyse' do
             taxon_base_path: '/root-taxon',
             link_href: '/path-0-0',
             navigation_page_type: 'accordion',
-            section: 'Subsection 0'
+            section: 'Subsection 0',
+            number_of_tags: 1,
+            taxon_base_paths: "taxon-0"
           },
           {
             taxon_base_path: '/root-taxon',
             link_href: '/path-0-1',
             navigation_page_type: 'accordion',
             section: 'Subsection 0',
+            number_of_tags: 1,
+            taxon_base_paths: "taxon-0"
           },
           {
             taxon_base_path: '/root-taxon',
             link_href: '/path-1-0',
             navigation_page_type: 'accordion',
             section: 'Subsection 1',
+            number_of_tags: 1,
+            taxon_base_paths: "taxon-1"
           },
           {
             taxon_base_path: '/root-taxon',
             link_href: '/path-1-1',
             navigation_page_type: 'accordion',
             section: 'Subsection 1',
+            number_of_tags: 1,
+            taxon_base_paths: "taxon-1"
           },
         )
       end
