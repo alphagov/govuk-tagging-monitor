@@ -11,6 +11,9 @@ module Analysers
             .at_css(CssSelector.for(:accordion_subsection_title))
             .text.strip
 
+          section_links_total = link.ancestors(CssSelector.for(:accordion_subsection))
+            .css(CssSelector.for(:accordion_content_item_links)).count
+
           link_href = link.attr('href')
           link_base_path = link_href.split('https://www.gov.uk').last
 
@@ -25,6 +28,7 @@ module Analysers
           results << {
             taxon_base_path: taxon.base_path,
             link_href: link_href,
+            total_number_of_links_per_section: section_links_total,
             navigation_page_type: taxon.navigation_page_type,
             section: section,
             number_of_tags: number_of_tags,
