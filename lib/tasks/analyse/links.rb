@@ -126,8 +126,12 @@ namespace :analyse do
     %i[
       navigation_page_type
       taxon_base_path
+      total_number_of_links
+      total_number_of_links_per_section
       section
       link_href
+      number_of_tags
+      taxon_base_paths
     ].freeze
   end
 
