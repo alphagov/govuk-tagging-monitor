@@ -14,6 +14,7 @@ module Analysers
           results << {
             taxon_base_path: taxon.base_path,
             link_href: link.attr('href'),
+            total_number_of_links: "N/A",
             total_number_of_links_per_section: 'N/A',
             navigation_page_type: taxon.navigation_page_type,
             section: 'grid',
@@ -44,6 +45,7 @@ module Analysers
           results << {
             taxon_base_path: taxon.base_path,
             link_href: link.attr('href'),
+            total_number_of_links: section_links_total,
             total_number_of_links_per_section: section_links_total,
             navigation_page_type: taxon.navigation_page_type,
             section: 'leaf',

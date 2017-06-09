@@ -27,6 +27,7 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/taxon-0',
+            total_number_of_links: 'N/A',
             total_number_of_links_per_section: 'N/A',
             navigation_page_type: 'grid',
             section: 'grid',
@@ -36,6 +37,7 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/taxon-1',
+            total_number_of_links: 'N/A',
             total_number_of_links_per_section: 'N/A',
             navigation_page_type: 'grid',
             section: 'grid',
@@ -58,6 +60,7 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/taxon-0',
+            total_number_of_links: "N/A",
             total_number_of_links_per_section: "N/A",
             navigation_page_type: 'grid',
             section: 'grid',
@@ -67,6 +70,7 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/taxon-1',
+            total_number_of_links: "N/A",
             total_number_of_links_per_section: "N/A",
             navigation_page_type: 'grid',
             section: 'grid',
@@ -76,6 +80,7 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/content-item-0',
+            total_number_of_links: 2,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'grid',
             section: 'leaf',
@@ -85,6 +90,7 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/content-item-1',
+            total_number_of_links: 2,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'grid',
             section: 'leaf',
@@ -118,6 +124,7 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/content-item-0',
+            total_number_of_links: 2,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'leaf',
             section: 'leaf',
@@ -127,6 +134,7 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/content-item-1',
+            total_number_of_links: 2,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'leaf',
             section: 'leaf',

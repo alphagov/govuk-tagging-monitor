@@ -25,6 +25,7 @@ RSpec.describe Analysers::Taxons::AccordionLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/path-0-0',
+            total_number_of_links: 4,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'accordion',
             section: 'Subsection 0',
@@ -34,6 +35,7 @@ RSpec.describe Analysers::Taxons::AccordionLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/path-0-1',
+            total_number_of_links: 4,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'accordion',
             section: 'Subsection 0',
@@ -43,6 +45,7 @@ RSpec.describe Analysers::Taxons::AccordionLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/path-1-0',
+            total_number_of_links: 4,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'accordion',
             section: 'Subsection 1',
@@ -52,6 +55,7 @@ RSpec.describe Analysers::Taxons::AccordionLinkAnalyser, '#analyse' do
           {
             taxon_base_path: '/root-taxon',
             link_href: '/path-1-1',
+            total_number_of_links: 4,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'accordion',
             section: 'Subsection 1',
