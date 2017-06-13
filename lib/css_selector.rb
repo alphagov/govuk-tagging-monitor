@@ -7,6 +7,7 @@ class CssSelector
       accordion_subsection_title: '.subsection-title',
       leaf_content_item_links: '.parent-topic-contents ol li a',
       leaf_subsection: '.parent-topic-contents',
+      blue_box_links: '.high-volume li a',
     }
   end
 

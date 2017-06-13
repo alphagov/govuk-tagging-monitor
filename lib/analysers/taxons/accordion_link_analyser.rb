@@ -4,7 +4,13 @@ module Analysers
       def analyse(taxon)
         return [] unless taxon.is_accordion?
 
-        total_links = taxon.body_html.css(CssSelector.for(:accordion_content_item_links)).count
+        total_links = taxon.body_html.css(
+          CssSelector.for(:accordion_content_item_links)
+        ).count
+
+        blue_box_links = taxon.body_html.css(
+          CssSelector.for(:blue_box_links)
+        ).map { |link| link.attr('href') }
 
         taxon.body_html.css(CssSelector.for(:accordion_content_item_links))
           .reduce([]) do |results, link|
@@ -36,6 +42,7 @@ module Analysers
             section: section,
             number_of_tags: number_of_tags,
             taxon_base_paths: taxon_base_paths.join(';'),
+            blue_box_links: blue_box_links.join(';'),
           }
         end
       end
