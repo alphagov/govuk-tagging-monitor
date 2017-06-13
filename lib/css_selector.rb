@@ -1,6 +1,7 @@
 class CssSelector
   def self.selectors
     {
+      grid_subsection: '.child-topics-list',
       grid_taxon_links: '.child-topics-list ol li a',
       accordion_content_item_links: '.subsection-content ol li a',
       accordion_subsection: '.subsection',

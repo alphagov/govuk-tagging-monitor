@@ -11,10 +11,13 @@ module Analysers
         taxon.body_html.css(CssSelector.for(:grid_taxon_links))
           .reduce([]) do |results, link|
 
+          links_total = link.ancestors(CssSelector.for(:grid_subsection))
+            .css(CssSelector.for(:grid_taxon_links)).count
+
           results << {
             taxon_base_path: taxon.base_path,
             link_href: link.attr('href'),
-            total_number_of_links: "N/A",
+            total_number_of_links: links_total,
             total_number_of_links_per_section: 'N/A',
             navigation_page_type: taxon.navigation_page_type,
             section: 'grid',
@@ -28,7 +31,7 @@ module Analysers
         taxon.body_html.css(CssSelector.for(:leaf_content_item_links))
           .reduce([]) do |results, link|
 
-          section_links_total = link.ancestors(CssSelector.for(:leaf_subsection))
+          links_total = link.ancestors(CssSelector.for(:leaf_subsection))
             .css(CssSelector.for(:leaf_content_item_links)).count
 
           link_href = link.attr('href')
@@ -45,8 +48,8 @@ module Analysers
           results << {
             taxon_base_path: taxon.base_path,
             link_href: link.attr('href'),
-            total_number_of_links: section_links_total,
-            total_number_of_links_per_section: section_links_total,
+            total_number_of_links: links_total,
+            total_number_of_links_per_section: "N/A",
             navigation_page_type: taxon.navigation_page_type,
             section: 'leaf',
             number_of_tags: number_of_tags,
