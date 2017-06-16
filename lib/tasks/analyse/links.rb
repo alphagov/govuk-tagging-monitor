@@ -29,7 +29,8 @@ namespace :analyse do
     save_spreadsheet(spreadsheet, google_drive)
 
     puts '=== DONE ==='
-    puts "Results saved to: #{spreadsheet.human_url}"
+    puts "Results saved to:"
+    puts "#{spreadsheet.human_url}"
 
     post_url_to_slack(spreadsheet.human_url)
   end
@@ -75,26 +76,31 @@ namespace :analyse do
       worksheet: worksheet,
     )
 
-    results_by_taxon_base_path = group_results(results, :taxon_base_path)
-
     row_number = 1
-    results_by_taxon_base_path.each_pair do |taxon_base_path, base_path_results|
-      navigation_page_type = base_path_results[0][:navigation_page_type]
 
-      if navigation_page_type == 'accordion'
-        base_path_results += base_path_results.map do |result|
-          result.merge(section: 'all')
+    results_by_navigation_page_type = group_results(results, :navigation_page_type)
+
+    results_by_navigation_page_type.each_pair do |navigation_page_type, page_type_results|
+
+      results_by_taxon_base_path = group_results(page_type_results, :taxon_base_path)
+
+      results_by_taxon_base_path.each_pair do |taxon_base_path, base_path_results|
+
+        if navigation_page_type == 'accordion'
+          base_path_results += base_path_results.map do |result|
+            result.merge(section: 'all')
+          end
         end
-      end
 
-      results_by_section = group_results(base_path_results, :section)
+        results_by_section = group_results(base_path_results, :section)
 
-      results_by_section.each_pair do |section, results|
-        add_row(
-          data: [navigation_page_type, taxon_base_path, section, results.count, regex_from_results(results)],
-          row_number: row_number += 1,
-          worksheet: worksheet,
-        )
+        results_by_section.each_pair do |section, results|
+          add_row(
+            data: [navigation_page_type, taxon_base_path, section, results.count, regex_from_results(results)],
+            row_number: row_number += 1,
+            worksheet: worksheet,
+          )
+        end
       end
     end
 
