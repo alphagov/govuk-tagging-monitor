@@ -52,16 +52,16 @@ namespace :analyse do
     overview_worksheet = spreadsheet.worksheets[0]
     overview_worksheet.title = 'Overview'
 
-    add_results_to_worksheet(results, overview_worksheet)
+    add_results_to_worksheet(results, overview_worksheet, column_names)
   end
 
   def write_page_type_worksheets(results, spreadsheet)
     puts 'Write page type worksheets'
     results_by_page_type = group_results(results, :navigation_page_type)
-
     results_by_page_type.each_pair do |navigation_page_type, page_type_results|
       worksheet = spreadsheet.add_worksheet(navigation_page_type.capitalize)
-      add_results_to_worksheet(page_type_results, worksheet)
+      column_names = columns_to_display(navigation_page_type)
+      add_results_to_worksheet(page_type_results, worksheet, column_names)
     end
   end
 
@@ -122,7 +122,7 @@ namespace :analyse do
       ')$'
   end
 
-  def result_columns
+  def column_names
     %i[
       navigation_page_type
       taxon_base_path
@@ -132,18 +132,26 @@ namespace :analyse do
       link_href
       number_of_tags
       taxon_base_paths
-    ].freeze
+    ]
   end
 
-  def add_results_to_worksheet(results, worksheet)
+  def columns_to_display(navigation_page_type)
+    if navigation_page_type == 'accordion'
+      column_names
+    else
+      column_names.reject{|column| column == :total_number_of_links_per_section  }
+    end
+  end
+
+  def add_results_to_worksheet(results, worksheet, column_names)
     add_row(
-      data: human_friendly(result_columns),
+      data: human_friendly(column_names),
       row_number: 1,
       worksheet: worksheet,
     )
 
     add_rows(
-      data: results_as_arrays(results),
+      data: results_as_arrays(results, worksheet.title),
       start_row_number: 2,
       worksheet: worksheet,
     )
@@ -167,9 +175,13 @@ namespace :analyse do
     end
   end
 
-  def results_as_arrays(results)
+  def results_as_arrays(results, worksheet_title)
     results.map do |result|
-      result_columns.map { |column| result[column] }
+      if worksheet_title == "Overview"
+        column_names.map { |column| result[column] }
+      else
+        columns_to_display(result[:navigation_page_type]).map { |column| result[column] }
+      end
     end
   end
 
