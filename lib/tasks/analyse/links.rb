@@ -86,7 +86,7 @@ namespace :analyse do
 
       results_by_taxon_base_path.each_pair do |taxon_base_path, base_path_results|
 
-        if navigation_page_type == 'accordion'
+        if navigation_page_type != 'leaf'
           base_path_results += base_path_results.map do |result|
             result.merge(section: 'all')
           end
