@@ -3,6 +3,7 @@ GEM
   specs:
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
+    coderay (1.1.1)
     colorize (0.8.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -44,6 +45,7 @@ GEM
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
     memoist (0.15.0)
+    method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
@@ -53,6 +55,10 @@ GEM
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
     os (0.9.6)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     public_suffix (2.0.5)
     rake (12.0.0)
     representable (3.0.4)
@@ -79,6 +85,7 @@ GEM
       faraday (~> 0.9)
       jwt (~> 1.5)
       multi_json (~> 1.10)
+    slop (3.6.0)
     statsd-ruby (1.3.0)
     typhoeus (1.1.2)
       ethon (>= 0.9.0)
@@ -95,6 +102,7 @@ DEPENDENCIES
   colorize
   google_drive (~> 2.1)
   nokogiri
+  pry
   rake
   rspec
   statsd-ruby
@@ -102,4 +110,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.14.5
+   1.14.6

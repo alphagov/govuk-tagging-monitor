@@ -8,6 +8,10 @@ module Analysers
       end
 
       def grid_results(taxon)
+        blue_box_links = taxon.body_html.css(
+          CssSelector.for(:blue_box_links)
+        ).map { |link| link.attr('href') }
+
         taxon.body_html.css(CssSelector.for(:grid_taxon_links))
           .reduce([]) do |results, link|
 
@@ -20,11 +24,16 @@ module Analysers
             section: 'grid',
             number_of_tags: 'N/A',
             taxon_base_paths: 'N/A',
+            blue_box_links: blue_box_links.join(';'),
           }
         end
       end
 
       def leaf_results(taxon)
+        blue_box_links = taxon.body_html.css(
+          CssSelector.for(:blue_box_links)
+        ).map { |link| link.attr('href') }
+
         taxon.body_html.css(CssSelector.for(:leaf_content_item_links))
           .reduce([]) do |results, link|
 
@@ -51,6 +60,7 @@ module Analysers
             section: 'leaf',
             number_of_tags: number_of_tags,
             taxon_base_paths: taxon_base_paths.join(';'),
+            blue_box_links: blue_box_links.join(';'),
           }
         end
       end

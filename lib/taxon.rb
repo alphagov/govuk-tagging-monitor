@@ -10,7 +10,7 @@ Taxon = Struct.new('Taxon', :base_path, :depth, :child_taxons) do
 
   def body_html
     @body_html ||= Nokogiri::HTML(
-      HTTP.get("https://www.gov.uk#{base_path}")
+      HTTP.get("https://www.gov.uk#{base_path}?ABTest-NavigationTest=ShowBlueBox")
     )
   end
 

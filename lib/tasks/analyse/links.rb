@@ -138,6 +138,7 @@ namespace :analyse do
       link_href
       number_of_tags
       taxon_base_paths
+      blue_box_links
     ].freeze
   end
 
