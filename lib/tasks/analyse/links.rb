@@ -7,7 +7,7 @@ namespace :analyse do
     Return analysis of links present on new navigation pages. This will output any content item links for
     accordions and leaf pages; and both the taxon links and content item links for grids.
   DESC
-  task :links do
+  task :links, [:drive_folder] do |_task, args|
     analyser = Analysers::TaxonomyAnalyser.new('/education')
 
     results = analyser.analyse([
@@ -21,12 +21,14 @@ namespace :analyse do
 
     google_drive = GoogleDrive::Session.from_service_account_key('govuk-tagging-monitor-2f614b9b92c2.json')
     spreadsheet = create_spreadsheet(google_drive)
+    set_spreadsheet_permissions(spreadsheet)
 
     write_overview_worksheet(results, spreadsheet)
     write_page_type_worksheets(results, spreadsheet)
     write_taxon_worksheet(results, spreadsheet)
 
-    save_spreadsheet(spreadsheet, google_drive)
+    target_folder = args[:drive_folder]
+    save_spreadsheet(spreadsheet, google_drive, target_folder)
 
     puts '=== DONE ==='
     puts "Results saved to:"
@@ -46,6 +48,14 @@ namespace :analyse do
     puts 'Create spreadsheet'
     date = Time.now.strftime('%Y-%m-%d')
     google_drive.create_spreadsheet("nav-page-inventory-#{date}")
+  end
+
+  def set_spreadsheet_permissions(spreadsheet)
+    spreadsheet.acl.push(
+      type: 'domain',
+      domain: 'digital.cabinet-office.gov.uk',
+      role: 'writer',
+    )
   end
 
   def write_overview_worksheet(results, spreadsheet)
@@ -107,9 +117,12 @@ namespace :analyse do
     worksheet.save
   end
 
-  def save_spreadsheet(spreadsheet, google_drive)
-    puts 'Save spreadsheet'
-    folder = google_drive.collection_by_url('https://drive.google.com/drive/folders/0B6ekrNZ58HKUc3BqT3NoblRfOUE')
+  def save_spreadsheet(spreadsheet, google_drive, target_folder)
+    return unless target_folder
+
+    puts 'Save spreadsheet to Google Drive folder:'
+    puts target_folder
+    folder = google_drive.collection_by_url(target_folder)
     folder.add(spreadsheet)
   end
 
