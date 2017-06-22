@@ -15,13 +15,13 @@ module Analysers
             .css(CssSelector.for(:grid_taxon_links)).count
 
           results << {
-            taxon_base_path: taxon.base_path,
+            navigation_url: taxon.base_path,
             link_href: link.attr('href'),
             total_number_of_links: links_total,
             navigation_page_type: taxon.navigation_page_type,
             section: 'grid',
             number_of_tags: 'N/A',
-            taxon_base_paths: 'N/A',
+            navigation_urls: 'N/A',
           }
         end
       end
@@ -45,13 +45,13 @@ module Analysers
           taxon_base_paths = taxon_tags.map { |taxon| taxon['base_path'] }
 
           results << {
-            taxon_base_path: taxon.base_path,
+            navigation_url: taxon.base_path,
             link_href: link.attr('href'),
             total_number_of_links: links_total,
             navigation_page_type: taxon.navigation_page_type,
             section: 'leaf',
             number_of_tags: number_of_tags,
-            taxon_base_paths: taxon_base_paths.join(';'),
+            navigation_urls: taxon_base_paths.join(';'),
           }
         end
       end

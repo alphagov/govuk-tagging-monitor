@@ -28,14 +28,14 @@ module Analysers
           taxon_base_paths = taxon_tags.map { |taxon| taxon['base_path'] }
 
           results << {
-            taxon_base_path: taxon.base_path,
+            navigation_url: taxon.base_path,
             link_href: link_href,
             total_number_of_links: total_links,
             total_number_of_links_per_section: section_links_total,
             navigation_page_type: taxon.navigation_page_type,
             section: section,
             number_of_tags: number_of_tags,
-            taxon_base_paths: taxon_base_paths.join(';'),
+            navigation_urls: taxon_base_paths.join(';'),
           }
         end
       end
