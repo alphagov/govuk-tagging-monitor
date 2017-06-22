@@ -52,6 +52,7 @@ module Analysers
             section: 'leaf',
             number_of_tags: number_of_tags,
             navigation_urls: taxon_base_paths.join(';'),
+            publishing_app: content_item['publishing_app'],
           }
         end
       end

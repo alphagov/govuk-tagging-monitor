@@ -1,6 +1,8 @@
 require 'uri'
 require 'google_drive'
 require 'json'
+require 'set'
+require 'gds_api/rummager'
 
 namespace :analyse do
   desc <<-DESC
@@ -23,9 +25,12 @@ namespace :analyse do
     spreadsheet = create_spreadsheet(google_drive)
     set_spreadsheet_permissions(spreadsheet)
 
+    write_summary_worksheet(results, spreadsheet)
     write_overview_worksheet(results, spreadsheet)
     write_page_type_worksheets(results, spreadsheet)
     write_taxon_worksheet(results, spreadsheet)
+
+    remove_empty_first_sheet(spreadsheet)
 
     target_folder = args[:drive_folder]
     save_spreadsheet(spreadsheet, google_drive, target_folder)
@@ -58,12 +63,68 @@ namespace :analyse do
     )
   end
 
+  def write_summary_worksheet(results, spreadsheet)
+    puts('Write Summary worksheet')
+
+    results_by_taxon = group_results(results, :navigation_url)
+    results_by_navigation_page_type = group_results(results, :navigation_page_type)
+
+    grid_results_by_taxon = group_results(
+      results_by_navigation_page_type['grid'],
+      :navigation_url
+    )
+    accordion_results_by_taxon = group_results(
+      results_by_navigation_page_type['accordion'],
+      :navigation_url
+    )
+    leaf_results_by_taxon = group_results(
+      results_by_navigation_page_type['leaf'],
+      :navigation_url
+    )
+
+    number_of_content_items = content_item_results(results).count
+    number_of_whitehall_content_items = whitehall_content_item_results(results).count
+
+    worksheet = spreadsheet.add_worksheet('Summary')
+    add_rows(
+      data: [
+        ['Total Navigation pages', results_by_taxon.count],
+        ['Total Grid pages', grid_results_by_taxon.count],
+        ['Total Accordion pages', accordion_results_by_taxon.count],
+        ['Total Leaf pages', leaf_results_by_taxon.count],
+        ['Total unique & visible content items', number_of_content_items],
+        ['Total unique & visible Whitehall content items', number_of_whitehall_content_items],
+        ['Total unique & visible Non-Whitehall content items', number_of_content_items - number_of_whitehall_content_items],
+        ['Total unique & visible hrefs', results.map{ |r| r[:link_href] }.to_set.count],
+        ['Total content items tagged', number_of_content_items_tagged_to_education]
+      ],
+      start_row_number: 1,
+      worksheet: worksheet,
+    )
+
+    worksheet.save
+  end
+
+  def content_item_results(results)
+    results.reject { |result| result[:section] == 'grid' }
+  end
+
+  def whitehall_content_item_results(results)
+    results.select { |result| result[:publishing_app] == 'whitehall' }
+  end
+
+  def number_of_content_items_tagged_to_education
+    rummager = GdsApi::Rummager.new('https://www.gov.uk/api')
+    rummager.search(
+      filter_part_of_taxonomy_tree: 'c58fdadd-7743-46d6-9629-90bb3ccc4ef0',
+      count: 0
+    ).to_h['total']
+  end
+
   def write_overview_worksheet(results, spreadsheet)
     puts 'Write overview worksheet'
-    overview_worksheet = spreadsheet.worksheets[0]
-    overview_worksheet.title = 'Overview'
-
-    add_results_to_worksheet(results, overview_worksheet, column_names)
+    worksheet = spreadsheet.add_worksheet('All pages')
+    add_results_to_worksheet(results, worksheet, column_names)
   end
 
   def write_page_type_worksheets(results, spreadsheet)
@@ -124,6 +185,10 @@ namespace :analyse do
     puts target_folder
     folder = google_drive.collection_by_url(target_folder)
     folder.add(spreadsheet)
+  end
+
+  def remove_empty_first_sheet(spreadsheet)
+    spreadsheet.worksheets[0].delete
   end
 
   def group_results(results, grouping_column)

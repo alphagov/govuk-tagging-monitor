@@ -22,7 +22,8 @@ class BodyHtml
         content_item = {
           'links' => {
             'taxons' => [ 'base_path' => "taxon-#{section_index}" ]
-          }
+          },
+          'publishing_app' => 'publishing_app',
         }.to_json
 
         WebMock.stub_request(:get, "https://www.gov.uk/api/content#{base_path}").
@@ -76,7 +77,8 @@ class BodyHtml
       content_item = {
         'links' => {
           'taxons' => [ 'base_path' => "taxon-#{content_item_index}" ]
-        }
+        },
+        'publishing_app' => 'publishing_app',
       }.to_json
 
       WebMock.stub_request(:get, "https://www.gov.uk/api/content#{base_path}").

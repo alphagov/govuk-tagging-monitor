@@ -30,7 +30,8 @@ RSpec.describe Analysers::Taxons::AccordionLinkAnalyser, '#analyse' do
             navigation_page_type: 'accordion',
             section: 'Subsection 0',
             number_of_tags: 1,
-            navigation_urls: "taxon-0"
+            navigation_urls: "taxon-0",
+            publishing_app: 'publishing_app',
           },
           {
             navigation_url: '/root-taxon',
@@ -40,7 +41,8 @@ RSpec.describe Analysers::Taxons::AccordionLinkAnalyser, '#analyse' do
             navigation_page_type: 'accordion',
             section: 'Subsection 0',
             number_of_tags: 1,
-            navigation_urls: "taxon-0"
+            navigation_urls: "taxon-0",
+            publishing_app: 'publishing_app',
           },
           {
             navigation_url: '/root-taxon',
@@ -50,7 +52,8 @@ RSpec.describe Analysers::Taxons::AccordionLinkAnalyser, '#analyse' do
             navigation_page_type: 'accordion',
             section: 'Subsection 1',
             number_of_tags: 1,
-            navigation_urls: "taxon-1"
+            navigation_urls: "taxon-1",
+            publishing_app: 'publishing_app',
           },
           {
             navigation_url: '/root-taxon',
@@ -60,7 +63,8 @@ RSpec.describe Analysers::Taxons::AccordionLinkAnalyser, '#analyse' do
             navigation_page_type: 'accordion',
             section: 'Subsection 1',
             number_of_tags: 1,
-            navigation_urls: "taxon-1"
+            navigation_urls: "taxon-1",
+            publishing_app: 'publishing_app',
           },
         )
       end
