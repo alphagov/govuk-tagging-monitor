@@ -81,7 +81,7 @@ namespace :analyse do
     worksheet = spreadsheet.add_worksheet('Taxons')
 
     add_row(
-      data: human_friendly(%w[navigation_page_type taxon_base_path section number_of_hrefs content_regex]),
+      data: human_friendly(%w[navigation_page_type navigation_url section number_of_hrefs content_regex]),
       row_number: 1,
       worksheet: worksheet,
     )
@@ -92,21 +92,21 @@ namespace :analyse do
 
     results_by_navigation_page_type.each_pair do |navigation_page_type, page_type_results|
 
-      results_by_taxon_base_path = group_results(page_type_results, :taxon_base_path)
+      results_by_navigation_url = group_results(page_type_results, :navigation_url)
 
-      results_by_taxon_base_path.each_pair do |taxon_base_path, base_path_results|
+      results_by_navigation_url.each_pair do |navigation_url, navigation_url_results|
 
         if navigation_page_type != 'leaf'
-          base_path_results += base_path_results.map do |result|
+          navigation_url_results += navigation_url_results.map do |result|
             result.merge(section: 'all')
           end
         end
 
-        results_by_section = group_results(base_path_results, :section)
+        results_by_section = group_results(navigation_url_results, :section)
 
         results_by_section.each_pair do |section, results|
           add_row(
-            data: [navigation_page_type, taxon_base_path, section, results.count, regex_from_results(results)],
+            data: [navigation_page_type, navigation_url, section, results.count, regex_from_results(results)],
             row_number: row_number += 1,
             worksheet: worksheet,
           )
@@ -144,13 +144,13 @@ namespace :analyse do
   def column_names
     %i[
       navigation_page_type
-      taxon_base_path
+      navigation_url
       total_number_of_links
-      total_number_of_links_per_section
       section
+      total_number_of_links_per_section
       link_href
       number_of_tags
-      taxon_base_paths
+      navigation_urls
     ]
   end
 

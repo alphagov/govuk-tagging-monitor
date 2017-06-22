@@ -23,44 +23,44 @@ RSpec.describe Analysers::Taxons::AccordionLinkAnalyser, '#analyse' do
         results = @analyser.analyse(@taxon)
         expect(results).to contain_exactly(
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/path-0-0',
             total_number_of_links: 4,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'accordion',
             section: 'Subsection 0',
             number_of_tags: 1,
-            taxon_base_paths: "taxon-0"
+            navigation_urls: "taxon-0"
           },
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/path-0-1',
             total_number_of_links: 4,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'accordion',
             section: 'Subsection 0',
             number_of_tags: 1,
-            taxon_base_paths: "taxon-0"
+            navigation_urls: "taxon-0"
           },
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/path-1-0',
             total_number_of_links: 4,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'accordion',
             section: 'Subsection 1',
             number_of_tags: 1,
-            taxon_base_paths: "taxon-1"
+            navigation_urls: "taxon-1"
           },
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/path-1-1',
             total_number_of_links: 4,
             total_number_of_links_per_section: 2,
             navigation_page_type: 'accordion',
             section: 'Subsection 1',
             number_of_tags: 1,
-            taxon_base_paths: "taxon-1"
+            navigation_urls: "taxon-1"
           },
         )
       end

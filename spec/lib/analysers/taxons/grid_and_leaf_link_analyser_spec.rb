@@ -25,22 +25,22 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
 
         expect(results).to contain_exactly(
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/taxon-0',
             total_number_of_links: 2,
             navigation_page_type: 'grid',
             section: 'grid',
             number_of_tags: 'N/A',
-            taxon_base_paths: 'N/A'
+            navigation_urls: 'N/A'
           },
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/taxon-1',
             total_number_of_links: 2,
             navigation_page_type: 'grid',
             section: 'grid',
             number_of_tags: 'N/A',
-            taxon_base_paths: 'N/A'
+            navigation_urls: 'N/A'
           },
         )
       end
@@ -56,40 +56,40 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
 
         expect(results).to contain_exactly(
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/taxon-0',
             total_number_of_links: 2,
             navigation_page_type: 'grid',
             section: 'grid',
             number_of_tags: 'N/A',
-            taxon_base_paths: 'N/A'
+            navigation_urls: 'N/A'
           },
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/taxon-1',
             total_number_of_links: 2,
             navigation_page_type: 'grid',
             section: 'grid',
             number_of_tags: 'N/A',
-            taxon_base_paths: 'N/A'
+            navigation_urls: 'N/A'
           },
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/content-item-0',
             total_number_of_links: 2,
             navigation_page_type: 'grid',
             section: 'leaf',
             number_of_tags: 1,
-            taxon_base_paths: 'taxon-0'
+            navigation_urls: 'taxon-0'
           },
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/content-item-1',
             total_number_of_links: 2,
             navigation_page_type: 'grid',
             section: 'leaf',
             number_of_tags: 1,
-            taxon_base_paths: 'taxon-1'
+            navigation_urls: 'taxon-1'
           },
         )
       end
@@ -116,22 +116,22 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
 
         expect(results).to contain_exactly(
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/content-item-0',
             total_number_of_links: 2,
             navigation_page_type: 'leaf',
             section: 'leaf',
             number_of_tags: 1,
-            taxon_base_paths: 'taxon-0'
+            navigation_urls: 'taxon-0'
           },
           {
-            taxon_base_path: '/root-taxon',
+            navigation_url: '/root-taxon',
             link_href: '/content-item-1',
             total_number_of_links: 2,
             navigation_page_type: 'leaf',
             section: 'leaf',
             number_of_tags: 1,
-            taxon_base_paths: 'taxon-1'
+            navigation_urls: 'taxon-1'
           },
         )
       end
