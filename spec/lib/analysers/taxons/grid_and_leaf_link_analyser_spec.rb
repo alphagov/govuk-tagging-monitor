@@ -31,7 +31,7 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
             navigation_page_type: 'grid',
             section: 'grid',
             number_of_tags: 'N/A',
-            navigation_urls: 'N/A'
+            navigation_urls: 'N/A',
           },
           {
             navigation_url: '/root-taxon',
@@ -40,7 +40,7 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
             navigation_page_type: 'grid',
             section: 'grid',
             number_of_tags: 'N/A',
-            navigation_urls: 'N/A'
+            navigation_urls: 'N/A',
           },
         )
       end
@@ -80,7 +80,8 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
             navigation_page_type: 'grid',
             section: 'leaf',
             number_of_tags: 1,
-            navigation_urls: 'taxon-0'
+            navigation_urls: 'taxon-0',
+            publishing_app: 'publishing_app',
           },
           {
             navigation_url: '/root-taxon',
@@ -89,7 +90,8 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
             navigation_page_type: 'grid',
             section: 'leaf',
             number_of_tags: 1,
-            navigation_urls: 'taxon-1'
+            navigation_urls: 'taxon-1',
+            publishing_app: 'publishing_app',
           },
         )
       end
@@ -122,7 +124,8 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
             navigation_page_type: 'leaf',
             section: 'leaf',
             number_of_tags: 1,
-            navigation_urls: 'taxon-0'
+            navigation_urls: 'taxon-0',
+            publishing_app: 'publishing_app',
           },
           {
             navigation_url: '/root-taxon',
@@ -131,7 +134,8 @@ RSpec.describe Analysers::Taxons::GridAndLeafLinkAnalyser, '#analyse' do
             navigation_page_type: 'leaf',
             section: 'leaf',
             number_of_tags: 1,
-            navigation_urls: 'taxon-1'
+            navigation_urls: 'taxon-1',
+            publishing_app: 'publishing_app',
           },
         )
       end

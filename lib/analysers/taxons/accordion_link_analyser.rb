@@ -27,7 +27,7 @@ module Analysers
           number_of_tags = taxon_tags.count
           taxon_base_paths = taxon_tags.map { |taxon| taxon['base_path'] }
 
-          results << {
+          result = {
             navigation_url: taxon.base_path,
             link_href: link_href,
             total_number_of_links: total_links,
@@ -37,6 +37,10 @@ module Analysers
             number_of_tags: number_of_tags,
             navigation_urls: taxon_base_paths.join(';'),
           }
+
+          result[:publishing_app] = content_item['publishing_app'] if content_item['publishing_app']
+
+          results << result
         end
       end
     end
