@@ -133,8 +133,8 @@ namespace :analyse do
       navigation_page_type
       navigation_url
       total_number_of_links
-      total_number_of_links_per_section
       section
+      total_number_of_links_per_section
       link_href
       number_of_tags
       navigation_urls
