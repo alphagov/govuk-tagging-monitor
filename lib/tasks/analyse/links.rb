@@ -29,6 +29,7 @@ namespace :analyse do
     write_overview_worksheet(results, spreadsheet)
     write_page_type_worksheets(results, spreadsheet)
     write_taxon_worksheet(results, spreadsheet)
+    write_whitehall_worksheet(results, spreadsheet)
 
     remove_empty_first_sheet(spreadsheet)
 
@@ -95,7 +96,7 @@ namespace :analyse do
         ['Total unique & visible content items', number_of_content_items],
         ['Total unique & visible Whitehall content items', number_of_whitehall_content_items],
         ['Total unique & visible Non-Whitehall content items', number_of_content_items - number_of_whitehall_content_items],
-        ['Total unique & visible hrefs', results.map{ |r| r[:link_href] }.to_set.count],
+        ['Total unique & visible hrefs', results.map { |r| r[:link_href] }.to_set.count],
         ['Total content items tagged', number_of_content_items_tagged_to_education]
       ],
       start_row_number: 1,
@@ -132,7 +133,7 @@ namespace :analyse do
     results_by_page_type = group_results(results, :navigation_page_type)
     results_by_page_type.each_pair do |navigation_page_type, page_type_results|
       worksheet = spreadsheet.add_worksheet(navigation_page_type.capitalize)
-      column_names = columns_to_display(navigation_page_type)
+      column_names = columns_to_display_for_navigation_page_type(navigation_page_type)
       add_results_to_worksheet(page_type_results, worksheet, column_names)
     end
   end
@@ -178,6 +179,14 @@ namespace :analyse do
     worksheet.save
   end
 
+  def write_whitehall_worksheet(results, spreadsheet)
+    puts 'Write Whitehall worksheet'
+    worksheet = spreadsheet.add_worksheet('Whitehall')
+
+    whitehall_results = whitehall_content_item_results(results)
+    add_results_to_worksheet(whitehall_results, worksheet, [:link_href])
+  end
+
   def save_spreadsheet(spreadsheet, google_drive, target_folder)
     return unless target_folder
 
@@ -219,23 +228,23 @@ namespace :analyse do
     ]
   end
 
-  def columns_to_display(navigation_page_type)
+  def columns_to_display_for_navigation_page_type(navigation_page_type)
     if navigation_page_type == 'accordion'
       column_names
     else
-      column_names.reject{|column| column == :total_number_of_links_per_section  }
+      column_names.reject { |column| column == :total_number_of_links_per_section }
     end
   end
 
-  def add_results_to_worksheet(results, worksheet, column_names)
+  def add_results_to_worksheet(results, worksheet, columns_to_display)
     add_row(
-      data: human_friendly(column_names),
+      data: human_friendly(columns_to_display),
       row_number: 1,
       worksheet: worksheet,
     )
 
     add_rows(
-      data: results_as_arrays(results, worksheet.title),
+      data: results_as_arrays(results, columns_to_display),
       start_row_number: 2,
       worksheet: worksheet,
     )
@@ -259,13 +268,9 @@ namespace :analyse do
     end
   end
 
-  def results_as_arrays(results, worksheet_title)
+  def results_as_arrays(results, columns_to_display)
     results.map do |result|
-      if worksheet_title == "Overview"
-        column_names.map { |column| result[column] }
-      else
-        columns_to_display(result[:navigation_page_type]).map { |column| result[column] }
-      end
+      columns_to_display.map { |column| result[column] }
     end
   end
 
