@@ -111,8 +111,18 @@ namespace :analyse do
   end
 
   def whitehall_content_item_results(results)
-    results.select { |result| result[:publishing_app] == 'whitehall' }
+    whitehall_results = results.select { |result| result[:publishing_app] == 'whitehall' }
+    whitehall_results.each do |result|
+      result.merge!(belongs_to_topic: whitehall_page_belongs_to_topic?(result[:link_href]))
+    end
   end
+
+  def whitehall_page_belongs_to_topic?(link_href)
+    response = Net::HTTP.get(URI("https://www.gov.uk/api/content#{link_href}"))
+    json = JSON.parse(response)
+    !json['links']['topics'].nil?
+  end
+
 
   def number_of_content_items_tagged_to_education
     rummager = GdsApi::Rummager.new('https://www.gov.uk/api')
@@ -184,7 +194,8 @@ namespace :analyse do
     worksheet = spreadsheet.add_worksheet('Whitehall')
 
     whitehall_results = whitehall_content_item_results(results)
-    add_results_to_worksheet(whitehall_results, worksheet, [:link_href])
+    column_names = [:link_href, :belongs_to_topic]
+    add_results_to_worksheet(whitehall_results, worksheet, column_names)
   end
 
   def save_spreadsheet(spreadsheet, google_drive, target_folder)
