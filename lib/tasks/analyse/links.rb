@@ -30,6 +30,7 @@ namespace :analyse do
     write_page_type_worksheets(results, spreadsheet)
     write_taxon_worksheet(results, spreadsheet)
     write_whitehall_worksheet(results, spreadsheet)
+    write_regex_worksheet(results, spreadsheet)
 
     remove_empty_first_sheet(spreadsheet)
 
@@ -123,7 +124,6 @@ namespace :analyse do
     !json['links']['topics'].nil?
   end
 
-
   def number_of_content_items_tagged_to_education
     rummager = GdsApi::Rummager.new('https://www.gov.uk/api')
     rummager.search(
@@ -196,6 +196,15 @@ namespace :analyse do
     whitehall_results = whitehall_content_item_results(results)
     column_names = [:link_href, :belongs_to_topic]
     add_results_to_worksheet(whitehall_results, worksheet, column_names)
+  end
+
+  def write_regex_worksheet(results, spreadsheet)
+    puts 'Write Regex worksheet'
+    worksheet = spreadsheet.add_worksheet('Regex')
+
+    regex_results = regex_content_item_results(results)
+    column_names = [:belongs_to_topic, :regex]
+    add_results_to_worksheet(regex_results, worksheet, column_names)
   end
 
   def save_spreadsheet(spreadsheet, google_drive, target_folder)
@@ -277,6 +286,18 @@ namespace :analyse do
         worksheet: worksheet,
       )
     end
+  end
+
+  def regex_content_item_results(results)
+    results = whitehall_content_item_results(results)
+    results_grouped_by_belongs_to_topic = group_results(results, :belongs_to_topic)
+    belongs_to_topic_per_100 = results_grouped_by_belongs_to_topic[true].each_slice(100).to_a
+    doesnt_belong_to_topic_per_100 = results_grouped_by_belongs_to_topic[false].each_slice(100).to_a
+
+    belongs_to_formatted = belongs_to_topic_per_100.map { |results| { belongs_to_topic: true, regex: regex_from_results(results)} }
+    doesnt_belong_to_formatted = doesnt_belong_to_topic_per_100.map { |results| { belongs_to_topic: false, regex: regex_from_results(results)} }
+
+    belongs_to_formatted + doesnt_belong_to_formatted
   end
 
   def results_as_arrays(results, columns_to_display)
