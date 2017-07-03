@@ -287,14 +287,15 @@ namespace :analyse do
 
   def regex_content_item_results(results)
     results = whitehall_content_item_results(results)
-    results_grouped_by_belongs_to_topic = group_results(results, :belongs_to_topic)
-    belongs_to_topic_per_100 = results_grouped_by_belongs_to_topic[true].each_slice(100).to_a
-    doesnt_belong_to_topic_per_100 = results_grouped_by_belongs_to_topic[false].each_slice(100).to_a
-
-    belongs_to_formatted = belongs_to_topic_per_100.map { |results| { belongs_to_topic: true, regex: regex_from_results(results)} }
-    doesnt_belong_to_formatted = doesnt_belong_to_topic_per_100.map { |results| { belongs_to_topic: false, regex: regex_from_results(results)} }
-
-    belongs_to_formatted + doesnt_belong_to_formatted
+    group_results(results, :belongs_to_topic)
+    .each_with_object([]) do |(belongs_to_topic, grouped_results), rows|
+      grouped_results.each_slice(50) do |slice|
+        rows << {
+          belongs_to_topic: belongs_to_topic,
+          regex: regex_from_results(slice)
+        }
+      end
+    end
   end
 
   def results_as_arrays(results, columns_to_display)
