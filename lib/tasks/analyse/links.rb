@@ -221,10 +221,7 @@ namespace :analyse do
   end
 
   def group_results(results, grouping_column)
-    results.reduce(Hash.new { |k, v| k[v] = [] }) do |hash, result|
-      hash[result[grouping_column]] << result
-      hash
-    end
+    results.group_by { |hash| hash[grouping_column] }
   end
 
   def regex_from_results(results)
