@@ -1,6 +1,6 @@
 module Notifiers
   class Slack
-    def self.notify(text:, username: 'Informative Parrot', emoji: ':gentleman_parrot:', channel: '#navigation')
+    def self.notify(text:, username: 'Informative Parrot', emoji: ':gentleman_parrot:', channel: '#taxonomy')
       message_payload = {
         username: username,
         icon_emoji: emoji,

@@ -1,7 +1,7 @@
 namespace :lint do
   desc <<-DESC
     Perform low-priority linting tasks on the taxonomy. The results are output to the console,
-    and also posted to the #navigation Slack channel as the "Disappointed Parrot"
+    and also posted to the #taxonomy Slack channel as the "Disappointed Parrot"
   DESC
   task :low_priority do
     include StatsHelpers
@@ -27,7 +27,7 @@ namespace :lint do
         icon_emoji: ':bored_parrot:',
         text: "#{summary}\n\n#{warnings.join("\n")}",
         mrkdwn: true,
-        channel: '#navigation',
+        channel: '#taxonomy',
       }
 
       HTTP.post(ENV["BADGER_SLACK_WEBHOOK_URL"], body: JSON.dump(message_payload))
