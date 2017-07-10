@@ -12,7 +12,7 @@ It [runs every hour on Jenkins][jenkins].
 The project consists of a number of rake tasks. These will:
 
 - Check the navigation pages. In certain cases it will report warnings to
-  the `#navigation` Slack channel.
+  the `#taxonomy` Slack channel.
 - Send basic stats to our `statsd` instance. These stats are used on a
   [grafana dashboard][dashboard].
 - Analyse the links on navigation pages, and report these in [Google Drive][google-drive].
@@ -24,13 +24,13 @@ The project consists of a number of rake tasks. These will:
 
 The Google Drive integration is handled by the [`google-drive-ruby`][google-drive-ruby] gem.
 Authentication with Google Drive is handled by a service account attached to the
-[`govuk-tagging-monitor`][google-cloud] Google Cloud project.  
+[`govuk-tagging-monitor`][google-cloud] Google Cloud project.
 
 See the documentation on Authorization through the Gem [here][auth-docs].
 
 Since the authentication is performed by a service account, you won't need to log in to Google
 to interact with Google Drive. However, you will need a credentials JSON file that authorizes
-the project to log in using this service account. You can find the JSON file 
+the project to log in using this service account. You can find the JSON file
 [on Jenkins][auth-json]. You will need to copy it into the root of your working directory, but
 **do not commit this file**.
 
