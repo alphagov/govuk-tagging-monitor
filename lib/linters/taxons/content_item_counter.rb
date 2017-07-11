@@ -34,6 +34,11 @@ module Linters
       def self.tagged_to_leaf(taxon)
         taxon.body_html.css(CssSelector.for(:leaf_content_item_links)).count
       end
+
+      # Returns the number of links in a blue box
+      def self.blue_box_links(taxon)
+        taxon.body_html.css(CssSelector.for(:blue_box_links)).count
+      end
     end
   end
 end

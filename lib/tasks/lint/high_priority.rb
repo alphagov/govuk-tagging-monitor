@@ -17,6 +17,7 @@ namespace :lint do
         d.depth = 0
         d.count_linter = Linters::Taxons::CountLinter.warn_if_greater_than(0)
       end,
+      Linters::Taxons::BlueBoxCountLinter.warn_if_equal_to(0),
     ])
 
     summary = "#{linter.size} taxons checked, #{warnings.size} issues found"
