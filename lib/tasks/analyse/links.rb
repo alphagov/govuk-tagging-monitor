@@ -30,6 +30,7 @@ namespace :analyse do
     write_page_type_worksheets(results, spreadsheet)
     write_taxon_worksheet(results, spreadsheet)
     write_whitehall_worksheet(results, spreadsheet)
+    write_regex_worksheet(results, spreadsheet)
 
     remove_empty_first_sheet(spreadsheet)
 
@@ -123,7 +124,6 @@ namespace :analyse do
     !json['links']['topics'].nil?
   end
 
-
   def number_of_content_items_tagged_to_education
     rummager = GdsApi::Rummager.new('https://www.gov.uk/api')
     rummager.search(
@@ -198,6 +198,15 @@ namespace :analyse do
     add_results_to_worksheet(whitehall_results, worksheet, column_names)
   end
 
+  def write_regex_worksheet(results, spreadsheet)
+    puts 'Write Regex worksheet'
+    worksheet = spreadsheet.add_worksheet('Regex')
+
+    regex_results = regex_content_item_results(results)
+    column_names = [:belongs_to_topic, :regex]
+    add_results_to_worksheet(regex_results, worksheet, column_names)
+  end
+
   def save_spreadsheet(spreadsheet, google_drive, target_folder)
     return unless target_folder
 
@@ -212,10 +221,7 @@ namespace :analyse do
   end
 
   def group_results(results, grouping_column)
-    results.reduce(Hash.new { |k, v| k[v] = [] }) do |hash, result|
-      hash[result[grouping_column]] << result
-      hash
-    end
+    results.group_by { |hash| hash[grouping_column] }
   end
 
   def regex_from_results(results)
@@ -276,6 +282,19 @@ namespace :analyse do
         row_number: start_row_number + row_increment,
         worksheet: worksheet,
       )
+    end
+  end
+
+  def regex_content_item_results(results)
+    results = whitehall_content_item_results(results)
+    group_results(results, :belongs_to_topic)
+    .each_with_object([]) do |(belongs_to_topic, grouped_results), rows|
+      grouped_results.each_slice(50) do |slice|
+        rows << {
+          belongs_to_topic: belongs_to_topic,
+          regex: regex_from_results(slice)
+        }
+      end
     end
   end
 
