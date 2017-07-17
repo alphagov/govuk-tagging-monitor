@@ -10,11 +10,11 @@ module Linters
             Please initialize #{self.class.name} with a block. This block should be a
             predicate that evaluates the number of content items on the page.
             If this predicate evaluates to true, a warning will be logged.
-  
+
             For example:
-  
+
               #{self.class.name}.new { |count| count == 0 }
-  
+
             will create a linter that will log warnings if 0 content items are tagged
           BLOCK
         end
@@ -29,6 +29,10 @@ module Linters
 
       def self.warn_if_greater_than(number)
         self.new(">#{number}") { |count| count > number }
+      end
+
+      def self.warn_if_not_equal_to(number)
+        self.new("!=#{number}") { |count| count != number }
       end
 
       def name

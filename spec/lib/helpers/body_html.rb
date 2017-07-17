@@ -1,20 +1,37 @@
 require 'webmock'
 
 class BodyHtml
-  def self.with_accordion_content_items(number_of_sections:, number_of_content_items:)
+  def self.with_accordion_content_items(number_of_sections:, number_of_content_items:, number_of_blue_box_links: 5)
     html_string = ''
+
+    if number_of_blue_box_links > 0
+      html_string += '
+        <div class="high-volume">
+          <h2>Most viewed in this topic</h2>
+          <ol>'
+
+      number_of_blue_box_links.times do |blue_box_link_index|
+        html_string += "<li>
+           <a href='/blue-box-base-path-#{blue_box_link_index}'>
+             Blue box content item #{blue_box_link_index}
+           </a>
+         </li>"
+      end
+
+      html_string += '</ol></div>'
+    end
 
     number_of_sections.times do |section_index|
       html_string +=
         "<div class='topic-content'>
-        <div class='subsection'>
-          <div class='subsection-header'>
-            <h2 class='subsection-title'>
-              Subsection #{section_index}
-            </h2>
-          </div>
-          <div class='subsection-content'>
-            <ol>"
+           <div class='subsection'>
+             <div class='subsection-header'>
+               <h2 class='subsection-title'>
+                 Subsection #{section_index}
+               </h2>
+             </div>
+             <div class='subsection-content'>
+               <ol>"
 
       number_of_content_items.times do |content_item_index|
         base_path = "/path-#{section_index}-#{content_item_index}"
