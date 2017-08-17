@@ -4,37 +4,10 @@ namespace :lint do
     and also posted to the #taxonomy Slack channel as the "Sad Parrot"
   DESC
   task :high_priority do
-    include StatsHelpers
 
-    linter = Linters::TaxonomyLinter.new('/education')
-
-    gauge 'navigation_pages.count', linter.size
-
-    warnings = linter.lint([
-      Linters::Taxons::AccordionCountLinter.warn_if_equal_to(0),
-      Linters::Taxons::LeafCountLinter.warn_if_equal_to(0),
-      Linters::Taxons::DepthCountLinter.new do |d|
-        d.depth = 0
-        d.count_linter = Linters::Taxons::CountLinter.warn_if_greater_than(0)
-      end,
-      Linters::Taxons::BlueBoxCountLinter.warn_if_equal_to(0),
-    ])
-
-    summary = "#{linter.size} taxons checked, #{warnings.size} issues found"
-
-    if warnings.any?
-      notification_text = "#{summary}\n\n#{warnings.join("\n")}"
-
-      Notifiers::Slack.notify(
-        text: notification_text,
-        username: 'Sad Parrot',
-        emoji: ':sadparrot:',
-      )
-
-      puts notification_text
-      puts summary.red
-    else
-      puts summary.green
+    ['/education', '/childcare-parenting'].each do |base_path|
+      tagging_monitor = TaggingMonitor.new(base_path)
+      tagging_monitor.publish_linter_warnings
     end
   end
 end
