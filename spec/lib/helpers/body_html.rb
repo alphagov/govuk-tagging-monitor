@@ -24,13 +24,13 @@ class BodyHtml
     number_of_sections.times do |section_index|
       html_string +=
         "<div class='topic-content'>
-           <div class='subsection'>
-             <div class='subsection-header'>
-               <h2 class='subsection-title'>
+           <div class='app-c-accordion__section'>
+             <div class='app-c-accordion__header'>
+               <h2 class='app-c-accordion__title'>
                  Subsection #{section_index}
                </h2>
              </div>
-             <div class='subsection-content'>
+             <div class='app-c-accordion__panel'>
                <ol>"
 
       number_of_content_items.times do |content_item_index|
@@ -85,7 +85,7 @@ class BodyHtml
       </nav>"
 
     html_string +=
-      "<div class='parent-topic-contents'>
+      "<div class='app-c-taxon-list__item'>
         <div class='topic-content'>
           <ol>"
 
@@ -103,7 +103,7 @@ class BodyHtml
 
       html_string +=
         "<li>
-          <a href='#{base_path}'>
+          <a class='app-c-taxon-list__link' href='#{base_path}'>
             Content Item #{content_item_index}
           </a>
         </li>"
