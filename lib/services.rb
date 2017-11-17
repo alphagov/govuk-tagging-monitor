@@ -4,6 +4,16 @@ module Services
   end
 
   def self.rummager
-    GdsApi::Rummager.new('https://www.gov.uk/api')
+    @rummager ||= GdsApi::Rummager.new(
+      Plek.new.find('rummager')
+    )
+  end
+
+  def self.publishing_api
+    @publishing_api ||= GdsApi::PublishingApiV2.new(
+      Plek.new.find('publishing-api'),
+      disable_cache: true,
+      bearer_token: ENV['PUBLISHING_API_BEARER_TOKEN'] || 'example',
+    )
   end
 end
