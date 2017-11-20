@@ -2,7 +2,6 @@ require 'uri'
 require 'google_drive'
 require 'json'
 require 'set'
-require 'gds_api/rummager'
 
 namespace :analyse do
   desc <<-DESC
@@ -125,8 +124,7 @@ namespace :analyse do
   end
 
   def number_of_content_items_tagged_to_education
-    rummager = GdsApi::Rummager.new('https://www.gov.uk/api')
-    rummager.search(
+    Services.rummager.search(
       filter_part_of_taxonomy_tree: 'c58fdadd-7743-46d6-9629-90bb3ccc4ef0',
       count: 0
     ).to_h['total']

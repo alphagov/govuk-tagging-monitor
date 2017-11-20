@@ -2,6 +2,8 @@ require 'typhoeus'
 require 'json'
 require 'statsd'
 require 'nokogiri'
+require 'gds_api/publishing_api_v2'
+require 'gds_api/rummager'
 
 require_relative './stats_helpers'
 require_relative './services'

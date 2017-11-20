@@ -73,7 +73,7 @@ GEM
     plek (2.0.0)
     public_suffix (2.0.5)
     rack (2.0.3)
-    rack-cache (1.7.0)
+    rack-cache (1.7.1)
       rack (>= 0.4)
     rake (12.0.0)
     representable (3.0.4)
@@ -121,9 +121,10 @@ PLATFORMS
 
 DEPENDENCIES
   colorize
-  gds-api-adapters
+  gds-api-adapters (~> 46.0)
   google_drive (~> 2.1)
   nokogiri
+  plek (~> 2.0)
   rake
   rspec
   statsd-ruby
@@ -131,4 +132,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.14.5
+   1.15.1

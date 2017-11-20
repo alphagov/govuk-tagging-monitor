@@ -7,17 +7,45 @@ RSpec.describe GlobalStats do
 
   describe '#run' do
     it "reports statistics" do
-      stub_request(:get, "https://www.gov.uk/api/search.json?count=0&debug=include_withdrawn").
-        to_return(body: JSON.dump(total: 123))
+      stub_request(:get, "http://rummager.dev.gov.uk/search.json")
+        .with(query: {
+          count: 0,
+          debug: 'include_withdrawn'
+        }).to_return(body: JSON.dump(total: 1000))
 
-      stub_request(:get, "https://www.gov.uk/api/search.json?count=0&debug=include_withdrawn&filter_taxons=_MISSING").
-        to_return(body: JSON.dump(total: 100))
+      stub_request(:get, "http://rummager.dev.gov.uk/search.json")
+        .with(query: {
+          count: 0,
+          debug: 'include_withdrawn',
+          reject_content_store_document_type: GlobalStats::BLACKLIST_DOCUMENT_TYPES
+        }).to_return(body: JSON.dump(total: 500))
+
+      stub_request(:get, "http://publishing-api.dev.gov.uk/v2/links/f3bbdec2-0e62-4520-a7fd-6ffd5d36e03a")
+        .to_return(body: JSON.dump(links: { root_taxons: ['aaaa-bbbb', 'cccc-dddd'] }))
+
+      stub_request(:get, "http://rummager.dev.gov.uk/search.json")
+        .with(query: {
+          count: 0,
+          debug: 'include_withdrawn',
+          filter_part_of_taxonomy_tree: ['aaaa-bbbb', 'cccc-dddd'],
+          reject_content_store_document_type: GlobalStats::BLACKLIST_DOCUMENT_TYPES
+        }).to_return(body: JSON.dump(total: 400))
 
       GlobalStats.new.run
 
-      expect(Services.statsd).to have_received(:gauge).with("govuk.tagging.items", 123)
-      expect(Services.statsd).to have_received(:gauge).with("govuk.tagging.items_without_taxons", 100)
-      expect(Services.statsd).to have_received(:gauge).with("govuk.tagging.items_with_taxons", 23)
+      aggregate_failures "metrics" do
+        expect(Services.statsd).to have_received(:gauge)
+          .with("govuk.tagging.items", 1000)
+
+        expect(Services.statsd).to have_received(:gauge)
+          .with("govuk.tagging.items_in_scope", 500)
+
+        expect(Services.statsd).to have_received(:gauge)
+          .with("govuk.tagging.tagged_items_in_scope", 400)
+
+        expect(Services.statsd).to have_received(:gauge)
+          .with("govuk.tagging.untagged_items_in_scope", 100)
+      end
     end
   end
 end
