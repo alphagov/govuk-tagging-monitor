@@ -66,30 +66,33 @@ class GlobalStats
   ].freeze
 
   def run
-    total_items = Services.rummager.search(
+    items = Services.rummager.search(
       count: 0,
       debug: 'include_withdrawn'
     ).to_h.fetch("total")
 
-    taggable_items = Services.rummager.search(
+    items_in_scope = Services.rummager.search(
       count: 0,
       reject_content_store_document_type: BLACKLIST_DOCUMENT_TYPES,
       debug: 'include_withdrawn'
     ).to_h.fetch("total")
 
-    root_taxons = Services.publishing_api.get_links(GOVUK_ROOT_CONTENT_ID)
-                    .to_h.dig("links", "root_taxons")
-
-    tagged_items = Services.rummager.search(
+    tagged_items_in_scope = Services.rummager.search(
       count: 0,
       filter_part_of_taxonomy_tree: root_taxons,
       reject_content_store_document_type: BLACKLIST_DOCUMENT_TYPES,
       debug: 'include_withdrawn'
     ).to_h.fetch("total")
 
-    gauge "items", total_items
-    gauge "taggable_items", taggable_items
-    gauge "taggable_items_with_taxons", tagged_items
-    gauge "taggable_items_without_taxons", taggable_items - tagged_items
+    gauge "items", items
+    gauge "items_in_scope", items_in_scope
+    gauge "tagged_items_in_scope", tagged_items_in_scope
+    gauge "untagged_items_in_scope", items_in_scope - tagged_items_in_scope
+  end
+
+private
+
+  def root_taxons
+    Services.publishing_api.get_links(GOVUK_ROOT_CONTENT_ID).to_h.dig("links", "root_taxons")
   end
 end

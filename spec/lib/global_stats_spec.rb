@@ -33,17 +33,19 @@ RSpec.describe GlobalStats do
 
       GlobalStats.new.run
 
-      expect(Services.statsd).to have_received(:gauge)
-        .with("govuk.tagging.items", 1000)
+      aggregate_failures "metrics" do
+        expect(Services.statsd).to have_received(:gauge)
+          .with("govuk.tagging.items", 1000)
 
-      expect(Services.statsd).to have_received(:gauge)
-        .with("govuk.tagging.taggable_items", 500)
+        expect(Services.statsd).to have_received(:gauge)
+          .with("govuk.tagging.items_in_scope", 500)
 
-      expect(Services.statsd).to have_received(:gauge)
-        .with("govuk.tagging.taggable_items_with_taxons", 400)
+        expect(Services.statsd).to have_received(:gauge)
+          .with("govuk.tagging.tagged_items_in_scope", 400)
 
-      expect(Services.statsd).to have_received(:gauge)
-        .with("govuk.tagging.taggable_items_without_taxons", 100)
+        expect(Services.statsd).to have_received(:gauge)
+          .with("govuk.tagging.untagged_items_in_scope", 100)
+      end
     end
   end
 end
