@@ -4,12 +4,8 @@ require_relative './lib/tasks/lint/low_priority'
 require_relative './lib/tasks/analyse/links'
 
 namespace :check do
-  task high_priority: %i[global_stats lint:high_priority]
+  task high_priority: %i[lint:high_priority]
   task low_priority: %i[lint:low_priority]
-end
-
-task :global_stats do
-  GlobalStats.new.run
 end
 
 task run: %i[check:high_priority]
